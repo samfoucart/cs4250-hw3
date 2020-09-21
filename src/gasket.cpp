@@ -181,7 +181,18 @@ extern "C" void keyboard(unsigned char key, int x, int y)
     // Send the new value to the GPU
     glUniform1f(zoom, zoomPercentage);
     glutPostRedisplay();
-    break;  
+    break;
+
+  case 'b':
+  case 'B':
+    // Increase zoom percentage
+    zoomPercentage -= .1;
+    // Let the user know the zoom percentage
+    std::cout << "Zoom Percentage: " << zoomPercentage << std::endl;
+    // Send the new value to the GPU
+    glUniform1f(zoom, zoomPercentage);
+    glutPostRedisplay();
+  break;      
 
   default:
     // Do nothing.
