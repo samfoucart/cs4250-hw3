@@ -8,6 +8,8 @@ find_package(GLEW REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(extern/angel06)
+
 set(SOURCES src/main.cpp
             )
 
