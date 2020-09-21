@@ -14,7 +14,7 @@ int main(int argc, char **argv)
   glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE);
   glutInitWindowSize(512, 512);
 
-  glutCreateWindow("Sierpinski Gasket");
+  glutCreateWindow("Homework 0: Modified Sierpinski Gasket");
 
   glewInit();
 
