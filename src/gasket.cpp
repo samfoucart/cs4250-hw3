@@ -15,11 +15,14 @@ using std::cerr;
 int NumPoints = 1000;  // Global to hold how many points we want to generate
 vec2 *points;          // Global to hold the generated points
 		       // (dynamically allocated).
+GLfloat zoomPercentage = 1.0;
+
 
 // Global OpenGL Variables
 GLuint buffer; // Identity of buffer object
 GLuint vao;    // Identity of Vertex Array Object
 GLuint loc;    // Identity of location of vPosition in shader storage
+GLuint zoom;
 
 //----------------------------------------------------------------------------
 // Start with a triangle.  Pick any point inside the triangle, and
@@ -75,6 +78,13 @@ void init()
   }
   glEnableVertexAttribArray(loc);
   glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+
+  zoom = glGetUniformLocation(program, "zoomPercentage");
+  if (zoom==-1) {
+    cerr << "Can't find shader variable: zoomPercentage!\n";
+    exit(EXIT_FAILURE);
+  }
+  glUniform1f(zoom, zoomPercentage);
 
   glClearColor(1.0, 1.0, 1.0, 1.0); // white background
 }
@@ -162,6 +172,16 @@ extern "C" void keyboard(unsigned char key, int x, int y)
     glutPostRedisplay();
 
     break;
+
+  case ' ':
+    // Increase zoom percentage
+    zoomPercentage += .1;
+    // Let the user know the zoom percentage
+    std::cout << "Zoom Percentage: " << zoomPercentage << std::endl;
+    // Send the new value to the GPU
+    glUniform1f(zoom, zoomPercentage);
+    glutPostRedisplay();
+    break;  
 
   default:
     // Do nothing.
