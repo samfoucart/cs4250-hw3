@@ -17,4 +17,5 @@ set(HEADERS
             )            
 
 add_executable(hw0 ${SOURCES} ${HEADERS})
-target_link_libraries(hw0 ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
+target_link_libraries(hw0 Angel ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
+target_include_directories(hw0 PUBLIC ${ANGEL_INCLUDE_DIRS})
