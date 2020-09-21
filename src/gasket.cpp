@@ -64,7 +64,7 @@ void init()
   glBufferData(GL_ARRAY_BUFFER, NumPoints*sizeof(vec2), points, GL_STATIC_DRAW);
 
   // Load shaders and use the resulting shader program
-  GLuint program = InitShader("vshaderSimple.glsl", "fshader21.glsl");
+  GLuint program = InitShader("src/shaders/vshaderSimple.glsl", "src/shaders/fshader21.glsl");
   glUseProgram(program);
 
   // Initialize the vertex position attribute from the vertex shader
@@ -169,26 +169,3 @@ extern "C" void keyboard(unsigned char key, int x, int y)
   }
 }
 
-//----------------------------------------------------------------------------
-int main(int argc, char **argv)
-{
-  // Make sure the random number generator gets different values each
-  // time the program is run.
-  srand(time(NULL));
-
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE);
-  glutInitWindowSize(512, 512);
-
-  glutCreateWindow("Sierpinski Gasket");
-
-  glewInit();
-
-  init();
-
-  glutDisplayFunc(display);
-  glutKeyboardFunc(keyboard);
-
-  glutMainLoop();
-  return EXIT_SUCCESS;
-}
