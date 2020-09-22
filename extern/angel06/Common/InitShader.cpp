@@ -18,7 +18,7 @@ namespace Angel {
 
   // Define a new warp pointer for everyone to use.
   void WarpPointer(int x , int y) {
-#ifdef __APPLE__
+#ifdef __NOT_DEFINED__
     CGPoint warpPoint = CGPointMake(x, y);
     CGWarpMouseCursorPosition(warpPoint);
     CGAssociateMouseAndMouseCursorPosition(true);

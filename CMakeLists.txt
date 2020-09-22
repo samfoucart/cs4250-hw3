@@ -18,4 +18,4 @@ set(HEADERS include/gasket.h
 
 add_executable(hw0 ${SOURCES} ${HEADERS})
 target_link_libraries(hw0 Angel ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
-target_include_directories(hw0 PUBLIC ${ANGEL_INCLUDE_DIRS} include)
+target_include_directories(hw0 PUBLIC include ${ANGEL_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})

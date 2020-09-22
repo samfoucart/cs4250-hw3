@@ -62,8 +62,13 @@ void init()
   generate_points(NumPoints);
 
   // Create a vertex array object
+  #ifdef __APPLE__
+  glGenVertexArraysAPPLE(1, &vao);
+  glBindVertexArrayAPPLE(vao);
+  #else
   glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
+  glBindVertexArrays(vao);
+  #endif
     
   // Create and initialize a buffer object
   glGenBuffers(1, &buffer);
@@ -71,7 +76,7 @@ void init()
   glBufferData(GL_ARRAY_BUFFER, NumPoints*sizeof(vec2), points, GL_STATIC_DRAW);
 
   // Load shaders and use the resulting shader program
-  GLuint program = InitShader("src/shaders/vshaderSimple.glsl", "src/shaders/fshaderSimple.glsl");
+  GLuint program = InitShader("../src/shaders/vshaderSimple.glsl", "../src/shaders/fshaderSimple.glsl");
   glUseProgram(program);
 
   // Initialize the vertex position attribute from the vertex shader
