@@ -1,3 +1,12 @@
+/**
+ * @file gasket.cpp
+ * 
+ * @author Sam Foucart sf241616@ohio.edu
+ * 
+ * @brief A modified version of Angel, Shreiner, Chelberg's sierpinski gasket program.
+ * The modification changes the color and implements panning and zooming.
+ * 
+ */
 // Two-Dimensional Sierpinski Gasket       
 // Generated using randomly selected vertices and bisection
 // 
@@ -15,18 +24,17 @@ using std::cerr;
 int NumPoints = 1000;  // Global to hold how many points we want to generate
 vec2 *points;          // Global to hold the generated points
 		       // (dynamically allocated).
-GLfloat zoomPercentage = 1.0;
-vec2 translation = vec2(0.0, 0.0);
-//vec2 previosPosition = vec2(0.0, 0.0);
+GLfloat zoomPercentage = 1.0; // Global to store zoom transformation
+vec2 translation = vec2(0.0, 0.0); // Global to store translation information
 
 
 // Global OpenGL Variables
 GLuint buffer; // Identity of buffer object
 GLuint vao;    // Identity of Vertex Array Object
 GLuint loc;    // Identity of location of vPosition in shader storage
-GLuint zoom;
-GLuint col;
-GLuint translate;
+GLuint zoom;   // The location of the zoom uniform in the shader storage
+GLuint col;    // Identity of color attribute in shader storage
+GLuint translate; // location of translate uniform in shader
 
 //----------------------------------------------------------------------------
 // Start with a triangle.  Pick any point inside the triangle, and
@@ -37,7 +45,7 @@ GLuint translate;
 void generate_points (int npoints)
 {
   points = new vec2[npoints];
-  // Specifiy the vertices for a triangle
+  // Specifiy the vertices for a triangle to be upside down
   vec2 vertices[3] = {vec2(-1.0, 1.0), 
 		      vec2( 0.0,  -1.0),
 		      vec2( 1.0, 1.0)};
@@ -88,6 +96,7 @@ void init()
   glEnableVertexAttribArray(loc);
   glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
+  // Initialize the vertex zoom uniform from the vertex shader
   zoom = glGetUniformLocation(program, "zoomPercentage");
   if (zoom==-1) {
     cerr << "Can't find shader variable: zoomPercentage!\n";
@@ -95,6 +104,7 @@ void init()
   }
   glUniform1f(zoom, zoomPercentage);
 
+  // Initialize the vertex translation uniform from the vertex shader
   translate = glGetUniformLocation(program, "translation");
   if (translate==-1) {
     cerr << "Can't find shader variable: translation!\n";
@@ -109,6 +119,7 @@ void init()
     exit(EXIT_FAILURE);
   }
   glEnableVertexAttribArray(col);
+  // The buffer offset is 0, because the color information and the location information are the same
   glVertexAttribPointer(col, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
   glClearColor(1.0, 1.0, 1.0, 1.0); // white background
@@ -227,11 +238,14 @@ extern "C" void keyboard(unsigned char key, int x, int y)
 
 extern "C" void mouse(int button, int state, int x, int y) {
   if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+    // Calculate the position of the mouse relative to window coordinates,
+    // Then scale down the translation by the zoom percentage so that it translates less the more it's zoomed in
     translation.x += ((float) x / (glutGet(GLUT_WINDOW_WIDTH)) - 0.5) / zoomPercentage;
     translation.y += ((float) y / (glutGet(GLUT_WINDOW_HEIGHT)) - 0.5) / zoomPercentage;
     // Let the user know the zoom percentage
     std::cout << "x: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << " y: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << std::endl;
     std::cout << "translation x: " << translation.x << " translation y: " << translation.y << std::endl;
+    // Send the new value to the GPU
     glUniform2f(translate, translation.x, translation.y);
     glutPostRedisplay();
   }

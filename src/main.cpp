@@ -1,3 +1,11 @@
+/**
+ * @file main.cpp
+ * 
+ * @author Sam Foucart sf241616@ohio.edu
+ * 
+ * @brief A program that uses glut and creates a window and initializes a display loop for an OpenGL program
+ * 
+ */
 #include <GL/glew.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
