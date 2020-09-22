@@ -5,12 +5,20 @@ starting point. Make a significant modification to the program" were given. The 
 
 ## Installation Instructions
 In the project root directory, the most common way to build and run a cmake project is to type:
+
 mkdir build
+
 cd build
+
 cmake ..
+
 make
+
 cd ..
+
 ./build/hw0
+
+
 
 But a makefile is provided in the project root just in case. NOTE: The project should be run from the project root directory, NOT the build directory, or else the shaders will not be able to be found, compiled, and linked.
 
