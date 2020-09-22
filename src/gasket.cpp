@@ -23,6 +23,7 @@ GLuint buffer; // Identity of buffer object
 GLuint vao;    // Identity of Vertex Array Object
 GLuint loc;    // Identity of location of vPosition in shader storage
 GLuint zoom;
+GLuint col;
 
 //----------------------------------------------------------------------------
 // Start with a triangle.  Pick any point inside the triangle, and
@@ -34,9 +35,9 @@ void generate_points (int npoints)
 {
   points = new vec2[npoints];
   // Specifiy the vertices for a triangle
-  vec2 vertices[3] = {vec2(-1.0, -1.0), 
-		      vec2( 0.0,  1.0), 
-		      vec2( 1.0, -1.0)};
+  vec2 vertices[3] = {vec2(-1.0, 1.0), 
+		      vec2( 0.0,  -1.0),
+		      vec2( 1.0, 1.0)};
 
   // Select an arbitrary initial point inside of the triangle
   points[0] = vec2(0.25, 0.50);
@@ -67,7 +68,7 @@ void init()
   glBufferData(GL_ARRAY_BUFFER, NumPoints*sizeof(vec2), points, GL_STATIC_DRAW);
 
   // Load shaders and use the resulting shader program
-  GLuint program = InitShader("src/shaders/vshaderSimple.glsl", "src/shaders/fshader21.glsl");
+  GLuint program = InitShader("src/shaders/vshaderSimple.glsl", "src/shaders/fshaderSimple.glsl");
   glUseProgram(program);
 
   // Initialize the vertex position attribute from the vertex shader
@@ -85,6 +86,15 @@ void init()
     exit(EXIT_FAILURE);
   }
   glUniform1f(zoom, zoomPercentage);
+
+  // Initialize the vertex color attribute from the vertex shader
+  col = glGetAttribLocation(program, "vColor");
+  if (col==-1) {
+    cerr << "Can't find shader variable: oijoijojvColor!\n";
+    exit(EXIT_FAILURE);
+  }
+  glEnableVertexAttribArray(col);
+  glVertexAttribPointer(col, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
   glClearColor(1.0, 1.0, 1.0, 1.0); // white background
 }
