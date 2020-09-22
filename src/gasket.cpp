@@ -75,7 +75,7 @@ void init()
   glBindVertexArrayAPPLE(vao);
   #else
   glGenVertexArrays(1, &vao);
-  glBindVertexArrays(vao);
+  glBindVertexArray(vao);
   #endif
     
   // Create and initialize a buffer object
