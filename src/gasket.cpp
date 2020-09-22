@@ -227,8 +227,8 @@ extern "C" void keyboard(unsigned char key, int x, int y)
 
 extern "C" void mouse(int button, int state, int x, int y) {
   if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-    translation.x += ((float) x / glutGet(GLUT_WINDOW_WIDTH)) - 0.5;
-    translation.y += ((float) y / glutGet(GLUT_WINDOW_HEIGHT)) - 0.5;
+    translation.x += ((float) x / (glutGet(GLUT_WINDOW_WIDTH)) - 0.5) / zoomPercentage;
+    translation.y += ((float) y / (glutGet(GLUT_WINDOW_HEIGHT)) - 0.5) / zoomPercentage;
     // Let the user know the zoom percentage
     std::cout << "x: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << " y: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << std::endl;
     std::cout << "translation x: " << translation.x << " translation y: " << translation.y << std::endl;
