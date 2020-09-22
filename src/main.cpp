@@ -22,6 +22,7 @@ int main(int argc, char **argv)
 
   glutDisplayFunc(display);
   glutKeyboardFunc(keyboard);
+  glutMouseFunc(mouse);
 
   glutMainLoop();
   return EXIT_SUCCESS;

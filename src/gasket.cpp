@@ -16,6 +16,8 @@ int NumPoints = 1000;  // Global to hold how many points we want to generate
 vec2 *points;          // Global to hold the generated points
 		       // (dynamically allocated).
 GLfloat zoomPercentage = 1.0;
+vec2 translation = vec2(0.0, 0.0);
+//vec2 previosPosition = vec2(0.0, 0.0);
 
 
 // Global OpenGL Variables
@@ -24,6 +26,7 @@ GLuint vao;    // Identity of Vertex Array Object
 GLuint loc;    // Identity of location of vPosition in shader storage
 GLuint zoom;
 GLuint col;
+GLuint translate;
 
 //----------------------------------------------------------------------------
 // Start with a triangle.  Pick any point inside the triangle, and
@@ -86,6 +89,13 @@ void init()
     exit(EXIT_FAILURE);
   }
   glUniform1f(zoom, zoomPercentage);
+
+  translate = glGetUniformLocation(program, "translation");
+  if (translate==-1) {
+    cerr << "Can't find shader variable: translation!\n";
+    exit(EXIT_FAILURE);
+  }
+  glUniform2f(translate, translation.x, translation.y);
 
   // Initialize the vertex color attribute from the vertex shader
   col = glGetAttribLocation(program, "vColor");
@@ -207,6 +217,18 @@ extern "C" void keyboard(unsigned char key, int x, int y)
   default:
     // Do nothing.
     break;
+  }
+}
+
+extern "C" void mouse(int button, int state, int x, int y) {
+  if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+    translation.x += ((float) x / glutGet(GLUT_WINDOW_WIDTH)) - 0.5;
+    translation.y += ((float) y / glutGet(GLUT_WINDOW_HEIGHT)) - 0.5;
+    // Let the user know the zoom percentage
+    std::cout << "x: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << " y: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << std::endl;
+    std::cout << "translation x: " << translation.x << " translation y: " << translation.y << std::endl;
+    glUniform2f(translate, translation.x, translation.y);
+    glutPostRedisplay();
   }
 }
 
