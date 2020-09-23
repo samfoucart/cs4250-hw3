@@ -20,7 +20,7 @@ cd ..
 
 
 
-But a makefile is provided in the project root just in case. NOTE: The project should be run from the project root directory, NOT the build directory, or else the shaders will not be able to be found, compiled, and linked.
+But a makefile is provided in the project build directory just in case. NOTE: The project should be run from the project build directory, NOT the build directory, or else the shaders will not be able to be found, compiled, and linked.
 
 ## Usage Instructions
 To zoom into the structure, press the spacebar. To zoom out of the structure, press the 'b' key on the keyboard. To pan around the structure, click on the part of the structure to focus towards with the mouse.
