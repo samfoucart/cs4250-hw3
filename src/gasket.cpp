@@ -55,7 +55,7 @@ void generate_points (int npoints)
 
   // compute and store N-1 new points
   for (int i = 1; i < npoints; ++i) {
-    int j = rand() % 4;   // pick a vertex at random
+    int j = rand() % 3;   // pick a vertex at random
 
     // Compute the point halfway between the selected vertex
     //   and the previous point
