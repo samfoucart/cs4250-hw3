@@ -35,6 +35,7 @@ GLuint loc;    // Identity of location of vPosition in shader storage
 GLuint zoom;   // The location of the zoom uniform in the shader storage
 GLuint col;    // Identity of color attribute in shader storage
 GLuint translate; // location of translate uniform in shader
+GLint windowSizeLoc;  // For uniform variable in shader
 
 //----------------------------------------------------------------------------
 // Start with a triangle.  Pick any point inside the triangle, and
@@ -112,6 +113,12 @@ void init()
   }
   glUniform2f(translate, translation.x, translation.y);
 
+    // Initialize the window size uniform from the vertex shader
+  windowSizeLoc = glGetUniformLocation(program, "windowSize");
+  if (windowSizeLoc==-1) {
+    std::cerr << "Unable to find windowSize parameter" << std::endl;
+  }
+
   // Initialize the vertex color attribute from the vertex shader
   col = glGetAttribLocation(program, "vColor");
   if (col==-1) {
@@ -122,7 +129,7 @@ void init()
   // The buffer offset is 0, because the color information and the location information are the same
   glVertexAttribPointer(col, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
-  glClearColor(1.0, 1.0, 1.0, 1.0); // white background
+  glClearColor(0, 0, 0, 1.0); // white background
 }
 
 //----------------------------------------------------------------------------
@@ -249,5 +256,18 @@ extern "C" void mouse(int button, int state, int x, int y) {
     glUniform2f(translate, translation.x, translation.y);
     glutPostRedisplay();
   }
+}
+
+// rehaping routine called whenever window is resized or
+// moved 
+extern "C" void reshape_window(int width, int height) {
+  // adjust viewport and clear
+  glViewport(0, 0, width, height);
+
+  glClearColor (0.0, 0.0, 0.0, 1.0);
+
+  glUniform2f(windowSizeLoc, width, height);             // Pass the window
+  glClear(GL_COLOR_BUFFER_BIT);
+  glFlush();
 }
 

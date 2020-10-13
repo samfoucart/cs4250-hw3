@@ -28,5 +28,6 @@ void init();
 extern "C" void display();
 extern "C" void keyboard(unsigned char key, int x, int y);
 extern "C" void mouse(int button, int state, int x, int y);
+extern "C" void reshape_window(int width, int height);
 
 #endif
