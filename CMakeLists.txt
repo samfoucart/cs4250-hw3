@@ -11,9 +11,9 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(extern/angel06)
 
 set(SOURCES src/main.cpp
-            src/gasket.cpp)
+            src/drone.cpp)
 
-set(HEADERS include/gasket.h
+set(HEADERS include/drone.h
             )            
 
 add_executable(hw0 ${SOURCES} ${HEADERS})

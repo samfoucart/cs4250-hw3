@@ -13,7 +13,7 @@
 #include <GL/glut.h>
 #endif
 #include "Angel.h"
-#include "gasket.h"
+#include "drone.h"
 
 //----------------------------------------------------------------------------
 int main(int argc, char **argv)

@@ -18,6 +18,7 @@
 // last-modified: Tue Sep 15 15:21:54 2020
 // 
 #include <Angel.h>
+#include "drone.h"
 using std::cerr;
 
 // Global user variables
