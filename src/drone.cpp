@@ -24,6 +24,7 @@ using std::cerr;
 // Global user variables
 GLfloat zoomPercentage = 1.0; // Global to store zoom transformation
 vec2 translation = vec2(0.0, 0.0); // Global to store translation information
+GLfloat theta = 0;
 
 
 // Global OpenGL Variables
@@ -92,6 +93,7 @@ void init()
   glutKeyboardFunc(keyboard);
   glutMouseFunc(mouse);
   glutReshapeFunc(reshape_window);
+  glutIdleFunc(idle);
 }
 
 //----------------------------------------------------------------------------
@@ -174,5 +176,15 @@ extern "C" void reshape_window(int width, int height) {
   //glUniform2f(windowSizeLoc, width, height);             // Pass the window
   glClear(GL_COLOR_BUFFER_BIT);
   glFlush();
+}
+
+extern "C" void idle() {
+  glClear(GL_COLOR_BUFFER_BIT);          // clear the window
+  //glEnable(GL_PROGRAM_POINT_SIZE_EXT);
+  //glPointSize(5);
+  theta += 1;
+  glUniformMatrix4fv(translate_loc, 1, GL_FALSE, RotateX(5) * RotateY(theta));
+  glDrawArrays(GL_LINE_STRIP, 0, hw1::NumPoints); // draw the points
+  glutSwapBuffers();
 }
 

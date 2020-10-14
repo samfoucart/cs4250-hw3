@@ -12,8 +12,8 @@
 
 #include <Angel.h>
 namespace hw1{
-const int NumPoints = 12;
-const vec4 points[12] = {vec4(-1, -1, 0, 1),
+const int NumPoints = 21;
+const vec4 points[21] = {vec4(-1, -1, 0, 1),
                       vec4(1, -1, 0, 1),
                       vec4(1, 1, 0, 1),
                       vec4(-1, 1, 0, 1),
@@ -25,6 +25,15 @@ const vec4 points[12] = {vec4(-1, -1, 0, 1),
                       vec4(1, 1, 1, 1),
                       vec4(1, -1, 1, 1),
                       vec4(-1, 1, 1, 1),
+                      vec4(-1, -1, 1, 1),
+                      vec4(1, -1, 1, 1),
+                      vec4(1, 1, 0, 1),
+                      vec4(1, -1, 0, 1),
+                      vec4(1, -1, 1, 1),
+                      vec4(-1, -1, 0, 1),
+                      vec4(-1, -1, 1, 1),
+                      vec4(-1, 1, 1, 1),
+                      vec4(-1, -1, 0, 1),
                      };
 }
 /**
@@ -35,5 +44,6 @@ extern "C" void display();
 extern "C" void keyboard(unsigned char key, int x, int y);
 extern "C" void mouse(int button, int state, int x, int y);
 extern "C" void reshape_window(int width, int height);
+extern "C" void idle();
 
 #endif
