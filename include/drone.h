@@ -11,31 +11,32 @@
 #define __GASKET_H__
 
 #include <Angel.h>
-namespace hw1{
-const int NumPoints = 21;
-const vec4 points[21] = {vec4(-1, -1, 0, 1),
-                      vec4(1, -1, 0, 1),
-                      vec4(1, 1, 0, 1),
-                      vec4(-1, 1, 0, 1),
-                      vec4(-1, -1, 0, 1),
-                      vec4(1, 1, 0, 1),
+const int NumPoints = 22;
+const vec4 points[22] = {
+                      vec4(-1, -1, -1, 1),
+                      vec4(1, -1, -1, 1),
+                      vec4(1, 1, -1, 1),
+                      vec4(-1, 1, -1, 1),
+                      vec4(-1, -1, -1, 1),
+                      vec4(1, 1, -1, 1),
                       vec4(1, 1, 1, 1),
-                      vec4(-1, 1, 0, 1),
+                      vec4(-1, 1, -1, 1),
                       vec4(-1, 1, 1, 1),
                       vec4(1, 1, 1, 1),
                       vec4(1, -1, 1, 1),
                       vec4(-1, 1, 1, 1),
                       vec4(-1, -1, 1, 1),
                       vec4(1, -1, 1, 1),
-                      vec4(1, 1, 0, 1),
-                      vec4(1, -1, 0, 1),
+                      vec4(1, 1, -1, 1),
+                      vec4(1, -1, -1, 1),
                       vec4(1, -1, 1, 1),
-                      vec4(-1, -1, 0, 1),
+                      vec4(-1, -1, -1, 1),
                       vec4(-1, -1, 1, 1),
                       vec4(-1, 1, 1, 1),
-                      vec4(-1, -1, 0, 1),
+                      vec4(-1, -1, -1, 1),
+                      vec4(-1, -1, -1, 1)
                      };
-}
+
 /**
  * init Initializes the shaders and calls generate_points to initialize the program
  */
