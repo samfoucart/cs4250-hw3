@@ -87,15 +87,13 @@ void init()
   }
   glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.25, .25, .25));
 
-  /*
   // Initialize the vertex translation uniform from the vertex shader
   rotate_loc = glGetUniformLocation(program, "wingRotation");
   if (rotate_loc == -1) {
     cerr << "Can't find shader variable: wingRotation!\n";
     exit(EXIT_FAILURE);
   }
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0) * RotateY(theta));
-  */
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
 
   // Initialize the vertex translation uniform from the vertex shader
   view_loc = glGetUniformLocation(program, "viewRotation");
@@ -201,15 +199,46 @@ extern "C" void idle() {
 
   // increment the viewing angle
   theta += 1;
-  // Rotate the cube down slightly and counterclockwise
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(-.5 * theta));
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.25, .25, .5));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
   // make the center lines not translated
   glUniformMatrix4fv(translate_loc, 1, GL_FALSE, Translate(0, 0, 0));
+  // Rotate everything down slightly and counterclockwise
+  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
   glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
-  // translate the points off of the lines
-  mat4 translation_matrix = Translate(.5,.5,.5);
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, translation_matrix);
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the points
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
+  // make the center lines not translated
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, .5));
+  // Rotate everything down slightly and counterclockwise
+  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
+  // make the center lines not translated
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, .5));
+  // Rotate everything down slightly and counterclockwise
+  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
+  // make the center lines not translated
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, -.5));
+  // Rotate everything down slightly and counterclockwise
+  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
+  // make the center lines not translated
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, -.5));
+  // Rotate everything down slightly and counterclockwise
+  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
   glutSwapBuffers();
 }

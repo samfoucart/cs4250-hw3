@@ -7,7 +7,7 @@ varying vec4 fColor;
 
 void main()
 {
-  gl_Position = viewRotation * translation * scaling * vPosition;
+  gl_Position = viewRotation * translation * wingRotation * scaling * vPosition;
 
   fColor.x = 1.0;
   fColor.y = 0.0;
