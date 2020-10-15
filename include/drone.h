@@ -1,17 +1,25 @@
 /**
- * @file gasket.h
+ * @file drone.h
  * 
  * @author Sam Foucart sf241616@ohio.edu
  * 
- * @brief A modified version of Angel, Shreiner, Chelberg's sierpinski gasket program.
- * The modification changes the color and implements panning and zooming.
+ * @brief A drone where the user can click and drag to view from different angles
+ * and push space to shoot a missle
  * 
  */
-#ifndef __GASKET_H__
-#define __GASKET_H__
+#ifndef __DRONE_H__
+#define __DRONE_H__
 
 #include <Angel.h>
+
+/**
+ * Number of points used to draw a wireframe cube with GL_LINE_STRIP
+ */ 
 const int NumPoints = 22;
+
+/**
+ * Points used to draw a wireframe cube with GL_LINE_STRIP
+ */ 
 const vec4 points[22] = {
                       vec4(-1, -1, -1, 1),
                       vec4(1, -1, -1, 1),
@@ -37,8 +45,19 @@ const vec4 points[22] = {
                       vec4(-1, -1, -1, 1)
                      };
 
+/**
+ * Draws the rotated rotors of the drone
+ */ 
 void drawRotors();
+
+/**
+ * Draws the missle that moves compared to time
+ */ 
 void drawMissle();
+
+/**
+ * Draws the launcher that the missle comes from
+ */ 
 void drawLauncher();
 
 /**
