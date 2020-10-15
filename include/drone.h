@@ -37,6 +37,10 @@ const vec4 points[22] = {
                       vec4(-1, -1, -1, 1)
                      };
 
+void drawRotors();
+void drawMissle();
+void drawLauncher();
+
 /**
  * init Initializes the shaders and calls generate_points to initialize the program
  */
@@ -46,5 +50,6 @@ extern "C" void keyboard(unsigned char key, int x, int y);
 extern "C" void mouse(int button, int state, int x, int y);
 extern "C" void reshape_window(int width, int height);
 extern "C" void idle();
+extern "C" void movement(int x, int y);
 
 #endif

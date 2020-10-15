@@ -24,7 +24,22 @@ using std::cerr;
 // Global user variables
 GLfloat zoomPercentage = 1.0; // Global to store zoom transformation
 vec2 translation = vec2(0.0, 0.0); // Global to store translation information
-GLfloat theta = 0;
+GLfloat wingTheta = 0;
+GLfloat viewTheta = 0;
+GLfloat viewPhi = 0;
+
+// initial location to rubber band from.
+GLsizei initx = 250;
+GLsizei inity = 250; 
+
+// last location to draw rubber band to.
+GLsizei lastx = 250;
+GLsizei lasty = 250; 
+
+GLfloat missleTime = 0;
+GLfloat missleTheta = 0;
+GLfloat misslePhi = 0;
+bool missleOnScreen;
 
 
 // Global OpenGL Variables
@@ -101,7 +116,7 @@ void init()
     cerr << "Can't find shader variable: viewRotation!\n";
     exit(EXIT_FAILURE);
   }
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(0) * RotateY(theta));
+  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(0));
 
   glClearColor(0, 0, 0, 1.0); // black background
 
@@ -111,6 +126,7 @@ void init()
   glutMouseFunc(mouse);
   glutReshapeFunc(reshape_window);
   glutIdleFunc(idle);
+  glutMotionFunc(movement);
 }
 
 //----------------------------------------------------------------------------
@@ -152,6 +168,10 @@ extern "C" void keyboard(unsigned char key, int x, int y)
     break;
 
   case ' ':
+    missleOnScreen = true;
+    missleTime = 0;
+    missleTheta = viewTheta;
+    misslePhi = viewPhi;
     break;
 
   case 'b':
@@ -165,20 +185,12 @@ extern "C" void keyboard(unsigned char key, int x, int y)
 }
 
 extern "C" void mouse(int button, int state, int x, int y) {
-  /*
   if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
     // Calculate the position of the mouse relative to window coordinates,
     // Then scale down the translation by the zoom percentage so that it translates less the more it's zoomed in
-    translation.x += ((float) x / (glutGet(GLUT_WINDOW_WIDTH)) - 0.5) / zoomPercentage;
-    translation.y += ((float) y / (glutGet(GLUT_WINDOW_HEIGHT)) - 0.5) / zoomPercentage;
-    // Let the user know the zoom percentage
-    std::cout << "x: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << " y: " << (float) x / glutGet(GLUT_WINDOW_WIDTH) << std::endl;
-    std::cout << "translation x: " << translation.x << " translation y: " << translation.y << std::endl;
-    // Send the new value to the GPU
-    glUniform2f(translate, translation.x, translation.y);
-    glutPostRedisplay();
+    lastx = x;
+    lasty = y;
   }
-  */
 }
 
 // rehaping routine called whenever window is resized or
@@ -197,49 +209,86 @@ extern "C" void reshape_window(int width, int height) {
 extern "C" void idle() {
   glClear(GL_COLOR_BUFFER_BIT);          // clear the window
 
-  // increment the viewing angle
-  theta += 1;
+  // increment the wing angle
+  wingTheta += 5;
 
+  // Rotate everything down slightly and counterclockwise
+  glUniformMatrix4fv(view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
+  
+  // draw drone body
   glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.25, .25, .5));
   glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
   // make the center lines not translated
   glUniformMatrix4fv(translate_loc, 1, GL_FALSE, Translate(0, 0, 0));
-  // Rotate everything down slightly and counterclockwise
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
   glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
-  // make the center lines not translated
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, .5));
-  // Rotate everything down slightly and counterclockwise
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
-
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
-  // make the center lines not translated
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, .5));
-  // Rotate everything down slightly and counterclockwise
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
-
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
-  // make the center lines not translated
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, -.5));
-  // Rotate everything down slightly and counterclockwise
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
-
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(theta));
-  // make the center lines not translated
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, -.5));
-  // Rotate everything down slightly and counterclockwise
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(5) * RotateY(.5 * theta));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+  drawRotors();
+  drawLauncher();
+  drawMissle();
 
   glutSwapBuffers();
+}
+
+extern "C" void movement(int x, int y) {
+  viewTheta = (y - lasty);
+  viewPhi = (x - lastx);
+}
+
+void drawRotors() {
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
+  // translate each wing
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, .5));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
+  // translate each wing
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, .5));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
+  // translate each wing
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, -.5));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
+  // translate each wing
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, -.5));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+}
+
+void drawMissle() {
+
+  if (missleOnScreen) {
+    // rotate the missle towards the constant trajectory
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(missleTheta) * RotateY(misslePhi));
+
+    glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.01, .01, .3));
+    glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(0));
+    // translate each wing
+    glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, -.25, .5 + missleTime));
+    glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+
+    // Rotate everything back to normal
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
+    // tell if missle is on screen
+    if (missleTime > 5) {
+      missleOnScreen = false;
+    } else {
+      missleTime += .1;
+    }
+  }
+  
+}
+
+void drawLauncher() {
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.01, .01, .3));
+  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(0));
+  // translate each wing
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, -.25, .5));
+  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 }
 
