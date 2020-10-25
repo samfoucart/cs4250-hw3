@@ -23,7 +23,7 @@ int main(int argc, char **argv)
   srand(time(NULL));
 
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE);
+  glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
   glutInitWindowSize(512, 512);
 
   glutCreateWindow("Homework 1: 3D Drone");

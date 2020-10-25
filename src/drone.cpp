@@ -169,12 +169,12 @@ extern "C" void reshape_window(int width, int height) {
   glClearColor (0.0, 0.0, 0.0, 1.0);
 
   //glUniform2f(windowSizeLoc, width, height);             // Pass the window
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glFlush();
 }
 
 extern "C" void idle() {
-  glClear(GL_COLOR_BUFFER_BIT);          // clear the window
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
 
   // increment the wing angle
   wingTheta += 5;
