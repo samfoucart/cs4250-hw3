@@ -153,7 +153,7 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
 }
 
 extern "C" void mouse(int button, int state, int x, int y) {
-  if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+  if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
     // Calculate the position the mouse was originally clicked at to tell how much the user drags the mouse
     lastx = x;
     lasty = y;
