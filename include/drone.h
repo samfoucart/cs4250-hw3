@@ -11,6 +11,10 @@
 #define __DRONE_H__
 
 #include <Angel.h>
+#include <stack>
+
+extern std::stack<mat4> mvStack;
+extern mat4 modelView;
 
 /**
  * Number of points used to draw a wireframe cube with GL_LINE_STRIP
