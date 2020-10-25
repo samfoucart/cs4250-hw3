@@ -1,4 +1,4 @@
-# CS4250 Homework 1
+# CS4250 Homework 2
 ## Overview
 An animated 3D drone with spinning rotors, the ability to click and drag to change viewing angle, and the ability to shoot a missle with the space bar.
 
@@ -13,7 +13,7 @@ cmake ..
 
 make
 
-./hw0
+./hw2
 
 
 
