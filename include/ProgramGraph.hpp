@@ -6,6 +6,7 @@
 
 #include "drone.h"
 #include "Angel.h"
+#include "Drawable.hpp"
 
 extern std::stack<mat4> mvStack;
 extern mat4 modelView;
@@ -20,13 +21,7 @@ struct DrawableNode {
     std::unique_ptr<Drawable> model;
     std::unique_ptr<DrawableNode> sibling;
     std::unique_ptr<DrawableNode> child;
-};
-
-struct Drawable {
-    mat4 transformation;
-    virtual void draw() = 0;
-    std::vector<vec4> points;
-};    
+};   
 
 inline void DrawableGraph::traverse(std::unique_ptr<DrawableNode>) {
     if (root == NULL) {
