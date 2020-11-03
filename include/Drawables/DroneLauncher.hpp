@@ -13,9 +13,10 @@ public:
     DroneLauncher();
     const mat4 defaultScale = Scale(.01, .01, .3);
     virtual void draw();
-    const vec3 position = vec3(0, -.25, .5);
+    void moveForward(GLfloat missleTime) { position = defaultPosition + vec3(0, 0, missleTime); }
+    const vec3 defaultPosition = vec3(0, -.25, .5);
 private:
-
+    vec3 position = defaultPosition;
 }; // end class
 
 

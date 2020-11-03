@@ -144,10 +144,11 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
 
   case ' ':
     // When the user pushes space, shoot a missle
-    missleOnScreen = true;
-    missleTime = 0;
-    missleTheta = viewTheta;
-    misslePhi = viewPhi;
+    //missleOnScreen = true;
+    //missleTime = 0;
+    //missleTheta = viewTheta;
+    //misslePhi = viewPhi;
+    drone.fireMissle();
     break;
 
   default:
@@ -198,8 +199,8 @@ extern "C" void idle() {
   //glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
   //drawRotors();
-  drawLauncher();
-  drawMissle();
+  //drawLauncher();
+  //drawMissle();
 
   glutSwapBuffers();
 }

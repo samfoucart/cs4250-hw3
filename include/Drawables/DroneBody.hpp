@@ -15,6 +15,12 @@ public:
     DroneBody();
     std::vector<DroneRotor> droneRotors;
     DroneLauncher launcher;
+
+    GLfloat missleTime;
+    bool missleVisible;
+    DroneLauncher missle;
+    void fireMissle();
+
     const mat4 defaultScale = Scale(.25, .25, .5);
     virtual void draw();
 
@@ -24,6 +30,10 @@ private:
     GLfloat wingTheta;
 }; // end class
 
+inline void DroneBody::fireMissle() {
+    missleVisible = true;
+    missleTime = 0;
+}
 
 inline void DroneBody::setWingTheta(GLfloat wingTheta) {
     this->wingTheta = wingTheta;
@@ -83,6 +93,17 @@ inline void DroneBody::draw() {
         x.draw();
     }
     launcher.draw();
+
+    if (missleTime > 5) {
+      missleVisible = false;
+    } else {
+      missleTime += .1;
+    }
+
+    if (missleVisible) {
+        missle.moveForward(missleTime);
+        missle.draw();
+    }
 }
 
 } // end namespace
