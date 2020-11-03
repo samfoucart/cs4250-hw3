@@ -16,6 +16,7 @@
 // 
 #include <Angel.h>
 #include "drone.h"
+#include "Drawables/DroneBody.hpp"
 using std::cerr;
 
 // Global user variables
@@ -42,8 +43,11 @@ GLuint vao;    // Identity of Vertex Array Object
 GLuint loc;    // Identity of location of vPosition in shader storage
 GLuint translate_loc; // location of vertex translation matrix
 GLuint rotate_loc; // location of wing rotation matrix
-GLuint view_loc; // location of viewing matrix 
+GLuint cs4250::view_loc; // location of model_view_matrix
 GLuint scale_loc; // location of a scaling matrix
+
+extern mat4 cs4250::modelView;
+cs4250::DroneBody drone;
 
 // Set up shaders, etc.
 void init()
@@ -90,7 +94,7 @@ void init()
     cerr << "Can't find shader variable: scaling!\n";
     exit(EXIT_FAILURE);
   }
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.25, .25, .25));
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, mat4());
 
   // Initialize the vertex translation uniform from the vertex shader
   rotate_loc = glGetUniformLocation(program, "wingRotation");
@@ -101,12 +105,12 @@ void init()
   glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
 
   // Initialize the vertex translation uniform from the vertex shader
-  view_loc = glGetUniformLocation(program, "viewRotation");
-  if (view_loc == -1) {
+  cs4250::view_loc = glGetUniformLocation(program, "viewRotation");
+  if (cs4250::view_loc == -1) {
     cerr << "Can't find shader variable: viewRotation!\n";
     exit(EXIT_FAILURE);
   }
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, RotateX(0));
+  glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, RotateX(0));
 
   glClearColor(0, 0, 0, 1.0); // black background
 
@@ -180,14 +184,17 @@ extern "C" void idle() {
   wingTheta += 5;
 
   // Rotate everything down slightly and counterclockwise
-  glUniformMatrix4fv(view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
+  //glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
+  cs4250::modelView = Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi);
   
   // draw drone body
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.25, .25, .5));
+  
+  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, mat4());
   glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
   // make the center lines not translated
-  glUniformMatrix4fv(translate_loc, 1, GL_FALSE, Translate(0, 0, 0));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
+  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, 0, 0));
+  drone.draw();
+  //glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
   drawRotors();
   drawLauncher();
@@ -234,7 +241,7 @@ void drawMissle() {
 
   if (missleOnScreen) {
     // rotate the missle towards the constant trajectory
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(missleTheta) * RotateY(misslePhi));
+    glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(missleTheta) * RotateY(misslePhi));
 
     // Shape the missle
     glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.01, .01, .3));
@@ -245,7 +252,7 @@ void drawMissle() {
     glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
     // Rotate everything back to normal
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
+    glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
     // tell if missle is on screen
     if (missleTime > 5) {
       missleOnScreen = false;
