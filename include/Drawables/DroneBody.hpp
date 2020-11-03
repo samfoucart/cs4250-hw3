@@ -13,10 +13,6 @@ class DroneBody: public Drawable {
 public:
     DroneBody();
     std::vector<DroneRotor> droneRotors;
-    DroneRotor topLeftRotor = DroneRotor(DroneRotor::TOP_LEFT);
-    DroneRotor topRightRotor = DroneRotor(DroneRotor::TOP_RIGHT);
-    DroneRotor bottomLeftRotor = DroneRotor(DroneRotor::BOTTOM_LEFT);
-    DroneRotor bottomRightRotor = DroneRotor(DroneRotor::BOTTOM_RIGHT);
     const mat4 defaultScale = Scale(.25, .25, .5);
     virtual void draw();
 
