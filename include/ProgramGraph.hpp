@@ -8,10 +8,11 @@
 #include "Angel.h"
 #include "Drawable.hpp"
 
+namespace cs4250{
 extern std::stack<mat4> mvStack;
 extern mat4 modelView;
 
-namespace cs4250{
+
 struct DrawableGraph {
     std::unique_ptr<DrawableNode> root;
     void traverse(std::unique_ptr<DrawableNode>);
