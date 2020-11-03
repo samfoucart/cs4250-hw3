@@ -143,11 +143,6 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
     break;
 
   case ' ':
-    // When the user pushes space, shoot a missle
-    //missleOnScreen = true;
-    //missleTime = 0;
-    //missleTheta = viewTheta;
-    //misslePhi = viewPhi;
     drone.fireMissle();
     break;
 
@@ -196,11 +191,7 @@ extern "C" void idle() {
   // make the center lines not translated
   glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, 0, 0));
   drone.draw();
-  //glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
-  //drawRotors();
-  //drawLauncher();
-  //drawMissle();
 
   glutSwapBuffers();
 }
@@ -211,67 +202,8 @@ extern "C" void movement(int x, int y) {
   viewPhi = (x - lastx);
 }
 
-void drawRotors() {
-  // Shape the wing
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  // Rotate the wing
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
-  // translate each wing
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, .5));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
-  // translate each wing
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, .5));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
-  // translate each wing
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(-.25, .25, -.5));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.2, .05, .1));
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(wingTheta));
-  // translate each wing
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(.25, .25, -.5));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
-}
 
-void drawMissle() {
-
-  if (missleOnScreen) {
-    // rotate the missle towards the constant trajectory
-    glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(missleTheta) * RotateY(misslePhi));
-
-    // Shape the missle
-    glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.01, .01, .3));
-    // Make sure the missle doesn't rotate with the wings
-    glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(0));
-    // translate each wing
-    glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, -.25, .5 + missleTime));
-    glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
-
-    // Rotate everything back to normal
-    glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
-    // tell if missle is on screen
-    if (missleTime > 5) {
-      missleOnScreen = false;
-    } else {
-      missleTime += .1;
-    }
-  }
-  
-}
-
-void drawLauncher() {
-  // Shape the launcher
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, Scale(.01, .01, .3));
-  // make sure the launcher doesn't rotate with the wings
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateY(0));
-  // translate each wing
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, -.25, .5));
-  glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
-}
 
