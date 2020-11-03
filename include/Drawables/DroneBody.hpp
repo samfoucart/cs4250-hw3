@@ -86,8 +86,7 @@ inline void DroneBody::draw() {
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, modelView);
     glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
-    modelView = mvStack.top();
-    mvStack.pop();
+    
 
     for(auto x: droneRotors) {
         x.draw();
@@ -104,6 +103,9 @@ inline void DroneBody::draw() {
         missle.moveForward(missleTime);
         missle.draw();
     }
+
+    modelView = mvStack.top();
+    mvStack.pop();
 }
 
 } // end namespace

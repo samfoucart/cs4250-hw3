@@ -12,7 +12,7 @@ class DroneRotor: public Drawable {
 public:
     enum RotorPosition{TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
     DroneRotor(RotorPosition rotorPosition = TOP_LEFT);
-    const mat4 defaultScale = Scale(.2, .05, .1);
+    const mat4 defaultScale = Scale(.2, .2, .5);
     virtual void draw();
 
     void setWingTheta(GLfloat wingTheta) { this->wingTheta = wingTheta; }
@@ -63,19 +63,19 @@ inline void DroneRotor::setRotorPosition(RotorPosition rotorPosition) {
     this->rotorPosition = rotorPosition;
     switch (this->rotorPosition) {
     case TOP_LEFT:
-        position = vec3(-.25, .25, .5);
+        position = vec3(-1, 1, 1);
         break;
 
     case TOP_RIGHT:
-        position = vec3(.25, .25, .5);
+        position = vec3(1, 1, 1);
         break;
 
     case BOTTOM_LEFT:
-        position = vec3(-.25, .25, -.5);
+        position = vec3(-1, 1, -1);
         break;
 
     case BOTTOM_RIGHT:
-        position = vec3(.25, .25, -.5);
+        position = vec3(1, 1, -1);
         break;
     
     default:

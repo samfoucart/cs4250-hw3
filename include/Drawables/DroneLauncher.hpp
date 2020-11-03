@@ -11,10 +11,10 @@ extern mat4 modelView;
 class DroneLauncher: public Drawable {
 public:
     DroneLauncher();
-    const mat4 defaultScale = Scale(.01, .01, .3);
+    const mat4 defaultScale = Scale(.01 * 4, .01 * 4, .3 * 2);
     virtual void draw();
     void moveForward(GLfloat missleTime) { position = defaultPosition + vec3(0, 0, missleTime); }
-    const vec3 defaultPosition = vec3(0, -.25, .5);
+    const vec3 defaultPosition = vec3(0, -1, 1);
 private:
     vec3 position = defaultPosition;
 }; // end class
