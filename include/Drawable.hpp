@@ -1,3 +1,6 @@
+#ifndef __DRAWABLE_HPP__
+#define __DRAWABLE_HPP__
+
 #include <vector>
 #include "Angel.h"
 
@@ -10,3 +13,5 @@ public:
     
 };
 }
+
+#endif
