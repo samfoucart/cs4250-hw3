@@ -182,6 +182,7 @@ extern "C" void idle() {
 
   // increment the wing angle
   wingTheta += 5;
+  drone.setWingTheta(wingTheta);
 
   // Rotate everything down slightly and counterclockwise
   //glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
@@ -196,7 +197,7 @@ extern "C" void idle() {
   drone.draw();
   //glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
-  drawRotors();
+  //drawRotors();
   drawLauncher();
   drawMissle();
 
