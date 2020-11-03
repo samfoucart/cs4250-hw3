@@ -18,7 +18,8 @@ set(HEADERS include/drone.h
             include/ProgramGraph.hpp
             include/Drawables/DroneBody.hpp
             include/Drawable.hpp
-            include/Drawables/DroneRotor.hpp)            
+            include/Drawables/DroneRotor.hpp
+            include/Drawables/DroneLauncher.hpp)            
 
 add_executable(hw2 ${SOURCES} ${HEADERS})
 target_link_libraries(hw2 Angel ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})

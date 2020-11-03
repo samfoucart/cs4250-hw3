@@ -1,38 +1,25 @@
-#ifndef __DRONE_BODY_HPP__
-#define __DRONE_BODY_HPP__
+#ifndef __DRONE_LAUNCHER_HPP__
+#define __DRONE_LAUNCHER_HPP__
 
-#include "drone.h"
 #include "Drawable.hpp"
-#include "DroneRotor.hpp"
-#include "DroneLauncher.hpp"
+#include "drone.h"
 
 namespace cs4250 {
-std::stack<mat4> mvStack;
-mat4 modelView;
+extern std::stack<mat4> mvStack;
+extern mat4 modelView;
 
-class DroneBody: public Drawable {
+class DroneLauncher: public Drawable {
 public:
-    DroneBody();
-    std::vector<DroneRotor> droneRotors;
-    DroneLauncher launcher;
-    const mat4 defaultScale = Scale(.25, .25, .5);
+    DroneLauncher();
+    const mat4 defaultScale = Scale(.01, .01, .3);
     virtual void draw();
-
-    void setWingTheta(GLfloat wingTheta);
-
+    const vec3 position = vec3(0, -.25, .5);
 private:
-    GLfloat wingTheta;
+
 }; // end class
 
 
-inline void DroneBody::setWingTheta(GLfloat wingTheta) {
-    this->wingTheta = wingTheta;
-    for(size_t i = 0; i < droneRotors.size(); ++i) {
-        droneRotors[i].setWingTheta(wingTheta);
-    }
-}
-
-inline DroneBody::DroneBody() {
+inline DroneLauncher::DroneLauncher() {
     /**
      * Points used to draw a wireframe cube with GL_LINE_STRIP
      */ 
@@ -62,27 +49,22 @@ inline DroneBody::DroneBody() {
                         });
 
     transformation = defaultScale;
-    droneRotors.push_back(DroneRotor(DroneRotor::TOP_LEFT));
-    droneRotors.push_back(DroneRotor(DroneRotor::TOP_RIGHT));
-    droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_LEFT));
-    droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_RIGHT));                   
 }
 
-inline void DroneBody::draw() {
+
+
+inline void DroneLauncher::draw() {
     mvStack.push(modelView);
+    mat4 translationMatrix = Translate(position);
+    translationMatrix = transpose(translationMatrix);
+    transformation = defaultScale * translationMatrix;
     modelView = transformation * modelView;
 
-    // Rotate everything down slightly and counterclockwise
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, modelView);
     glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
     modelView = mvStack.top();
     mvStack.pop();
-
-    for(auto x: droneRotors) {
-        x.draw();
-    }
-    launcher.draw();
 }
 
 } // end namespace
