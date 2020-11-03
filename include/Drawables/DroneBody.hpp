@@ -12,6 +12,7 @@ mat4 modelView;
 class DroneBody: public Drawable {
 public:
     DroneBody();
+    std::vector<DroneRotor> droneRotors;
     DroneRotor topLeftRotor = DroneRotor(DroneRotor::TOP_LEFT);
     DroneRotor topRightRotor = DroneRotor(DroneRotor::TOP_RIGHT);
     DroneRotor bottomLeftRotor = DroneRotor(DroneRotor::BOTTOM_LEFT);
@@ -28,10 +29,9 @@ private:
 
 inline void DroneBody::setWingTheta(GLfloat wingTheta) {
     this->wingTheta = wingTheta;
-    topLeftRotor.wingTheta = this->wingTheta;
-    topRightRotor.wingTheta = this->wingTheta;
-    bottomLeftRotor.wingTheta = this->wingTheta;
-    bottomRightRotor.wingTheta = this->wingTheta;
+    for(size_t i = 0; i < droneRotors.size(); ++i) {
+        droneRotors[i].setWingTheta(wingTheta);
+    }
 }
 
 inline DroneBody::DroneBody() {
@@ -63,7 +63,11 @@ inline DroneBody::DroneBody() {
                         vec4(-1, -1, -1, 1)
                         });
 
-    transformation = defaultScale;                   
+    transformation = defaultScale;
+    droneRotors.push_back(DroneRotor(DroneRotor::TOP_LEFT));
+    droneRotors.push_back(DroneRotor(DroneRotor::TOP_RIGHT));
+    droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_LEFT));
+    droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_RIGHT));                   
 }
 
 inline void DroneBody::draw() {
@@ -76,13 +80,10 @@ inline void DroneBody::draw() {
 
     modelView = mvStack.top();
     mvStack.pop();
-    topLeftRotor.draw();
-    topRightRotor.draw();
-    bottomLeftRotor.draw();
-    bottomRightRotor.draw();
 
-    
-
+    for(auto x: droneRotors) {
+        x.draw();
+    }
 }
 
 } // end namespace

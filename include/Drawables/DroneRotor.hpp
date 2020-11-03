@@ -10,17 +10,19 @@ extern mat4 modelView;
 
 class DroneRotor: public Drawable {
 public:
-    GLfloat wingTheta = 0;
     enum RotorPosition{TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
     DroneRotor(RotorPosition rotorPosition = TOP_LEFT);
     const mat4 defaultScale = Scale(.2, .05, .1);
     virtual void draw();
+
+    void setWingTheta(GLfloat wingTheta) { this->wingTheta = wingTheta; }
     
     RotorPosition getRotorPosition() { return rotorPosition; }
     void setRotorPosition(RotorPosition rotorPosition);
 private:
     vec3 position;
     RotorPosition rotorPosition;
+    GLfloat wingTheta = 0;
 }; // end class
 
 
