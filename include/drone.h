@@ -17,6 +17,7 @@ namespace cs4250 {
 extern std::stack<mat4> mvStack;
 extern mat4 modelView;
 extern GLuint view_loc; // location of model_view_matrix
+extern GLuint color_loc;
 }
 
 /**

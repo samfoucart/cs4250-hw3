@@ -41,10 +41,9 @@ bool missleOnScreen;
 GLuint buffer; // Identity of buffer object
 GLuint vao;    // Identity of Vertex Array Object
 GLuint loc;    // Identity of location of vPosition in shader storage
-GLuint translate_loc; // location of vertex translation matrix
-GLuint rotate_loc; // location of wing rotation matrix
 GLuint cs4250::view_loc; // location of model_view_matrix
-GLuint scale_loc; // location of a scaling matrix
+GLuint cs4250::color_loc; // location of model_view_matrix
+
 
 extern mat4 cs4250::modelView;
 std::vector<cs4250::DroneBody> drones;
@@ -79,31 +78,6 @@ void init()
   glEnableVertexAttribArray(loc);
   glVertexAttribPointer(loc, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
-
-  // Initialize the vertex translation uniform from the vertex shader
-  translate_loc = glGetUniformLocation(program, "translation");
-  if (translate_loc == -1) {
-    cerr << "Can't find shader variable: translation!\n";
-    exit(EXIT_FAILURE);
-  }
-  glUniformMatrix4fv(translate_loc, 1, GL_FALSE, Translate(0, 0, 0));
-
-  // Initialize the vertex translation uniform from the vertex shader
-  scale_loc = glGetUniformLocation(program, "scaling");
-  if (scale_loc == -1) {
-    cerr << "Can't find shader variable: scaling!\n";
-    exit(EXIT_FAILURE);
-  }
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, mat4());
-
-  // Initialize the vertex translation uniform from the vertex shader
-  rotate_loc = glGetUniformLocation(program, "wingRotation");
-  if (rotate_loc == -1) {
-    cerr << "Can't find shader variable: wingRotation!\n";
-    exit(EXIT_FAILURE);
-  }
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
-
   // Initialize the vertex translation uniform from the vertex shader
   cs4250::view_loc = glGetUniformLocation(program, "viewRotation");
   if (cs4250::view_loc == -1) {
@@ -111,6 +85,14 @@ void init()
     exit(EXIT_FAILURE);
   }
   glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, RotateX(0));
+
+  // Initialize the color uniform from vertex shader
+  cs4250::color_loc = glGetUniformLocation(program, "vColor");
+  if (cs4250::color_loc == -1) {
+    cerr << "Can't find shader variable: vColor!\n";
+    exit(EXIT_FAILURE);
+  }
+  glUniform4f(cs4250::color_loc, 1, 0, 0, 1);
 
   glClearColor(0, 0, 0, 1.0); // black background
 
@@ -184,18 +166,9 @@ extern "C" void reshape_window(int width, int height) {
 extern "C" void idle() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
 
-  
-
   // Rotate everything down slightly and counterclockwise
   //glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
   cs4250::modelView = Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi);
-  
-  // draw drone body
-  
-  glUniformMatrix4fv(scale_loc, 1, GL_FALSE, mat4());
-  glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
-  // make the center lines not translated
-  glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, 0, 0));
 
   // increment the wing angle
   wingTheta += 5;
@@ -203,7 +176,6 @@ extern "C" void idle() {
         drones[i].setWingTheta(wingTheta);
         drones[i].draw();
   }
-
 
   glutSwapBuffers();
 }
