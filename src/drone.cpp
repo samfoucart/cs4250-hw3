@@ -47,7 +47,7 @@ GLuint cs4250::view_loc; // location of model_view_matrix
 GLuint scale_loc; // location of a scaling matrix
 
 extern mat4 cs4250::modelView;
-cs4250::DroneBody drone;
+std::vector<cs4250::DroneBody> drones;
 
 // Set up shaders, etc.
 void init()
@@ -121,6 +121,12 @@ void init()
   glutReshapeFunc(reshape_window);
   glutIdleFunc(idle);
   glutMotionFunc(movement);
+
+
+
+  drones.push_back(cs4250::DroneBody(vec3(0, 0, 0)));
+  drones.push_back(cs4250::DroneBody(vec3(1, 1, 1)));
+  drones.push_back(cs4250::DroneBody(vec3(-.75, 0, -.5)));
 }
 
 //----------------------------------------------------------------------------
@@ -143,7 +149,9 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
     break;
 
   case ' ':
-    drone.fireMissle();
+    for(size_t i = 0; i < drones.size(); ++i) {
+        drones[i].fireMissle();
+  }
     break;
 
   default:
@@ -176,9 +184,7 @@ extern "C" void reshape_window(int width, int height) {
 extern "C" void idle() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
 
-  // increment the wing angle
-  wingTheta += 5;
-  drone.setWingTheta(wingTheta);
+  
 
   // Rotate everything down slightly and counterclockwise
   //glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
@@ -190,7 +196,13 @@ extern "C" void idle() {
   glUniformMatrix4fv(rotate_loc, 1, GL_FALSE, RotateX(0));
   // make the center lines not translated
   glUniformMatrix4fv(translate_loc, 1, GL_TRUE, Translate(0, 0, 0));
-  drone.draw();
+
+  // increment the wing angle
+  wingTheta += 5;
+  for(size_t i = 0; i < drones.size(); ++i) {
+        drones[i].setWingTheta(wingTheta);
+        drones[i].draw();
+  }
 
 
   glutSwapBuffers();

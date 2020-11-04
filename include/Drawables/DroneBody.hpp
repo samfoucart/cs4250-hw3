@@ -12,7 +12,8 @@ mat4 modelView;
 
 class DroneBody: public Drawable {
 public:
-    DroneBody();
+    DroneBody() : DroneBody(vec3(0, 0, 0)) {};
+    DroneBody(vec3 position);
     std::vector<DroneRotor> droneRotors;
     DroneLauncher launcher;
 
@@ -25,6 +26,14 @@ public:
     virtual void draw();
 
     void setWingTheta(GLfloat wingTheta);
+
+    vec3 position = vec3(0, 0, 0);
+
+    const vec4 REDVEC = vec4(1, 0, 0, 1);
+    const vec4 BLUEVEC = vec4(0, 0, 1, 1);
+    const vec4 MIDVEC = vec4(.5, 0, .5, 1);
+    enum Team{GOOD, BAD} team = GOOD;
+    bool selected = false;
 
 private:
     GLfloat wingTheta;
@@ -42,7 +51,7 @@ inline void DroneBody::setWingTheta(GLfloat wingTheta) {
     }
 }
 
-inline DroneBody::DroneBody() {
+inline DroneBody::DroneBody(vec3 position) {
     /**
      * Points used to draw a wireframe cube with GL_LINE_STRIP
      */ 
@@ -75,11 +84,13 @@ inline DroneBody::DroneBody() {
     droneRotors.push_back(DroneRotor(DroneRotor::TOP_LEFT));
     droneRotors.push_back(DroneRotor(DroneRotor::TOP_RIGHT));
     droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_LEFT));
-    droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_RIGHT));                   
+    droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_RIGHT));
+    this->position = position;                   
 }
 
 inline void DroneBody::draw() {
     mvStack.push(modelView);
+    transformation = defaultScale * transpose(Translate(position));
     modelView = transformation * modelView;
 
     // Rotate everything down slightly and counterclockwise
