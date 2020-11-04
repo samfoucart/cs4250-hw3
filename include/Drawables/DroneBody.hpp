@@ -31,7 +31,10 @@ public:
 
     const vec4 REDVEC = vec4(1, 0, 0, 1);
     const vec4 BLUEVEC = vec4(0, 0, 1, 1);
-    const vec4 MIDVEC = vec4(.5, 0, .5, 1);
+    const vec4 HOVERVEC = vec4(.5, 0, .5, 1);
+    const vec4 SELECTEDVEC = vec4(0, 1, 0, 1);
+
+    vec4 currentColor = HOVERVEC;
     enum Team{GOOD, BAD} team = GOOD;
     bool selected = false;
 
@@ -95,6 +98,8 @@ inline void DroneBody::draw() {
 
     // Rotate everything down slightly and counterclockwise
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, modelView);
+
+    glUniform4f(cs4250::color_loc, currentColor[0], currentColor[1], currentColor[2], currentColor[3]);
     glDrawArrays(GL_LINE_STRIP, 0, NumPoints); // draw the lines
 
     
