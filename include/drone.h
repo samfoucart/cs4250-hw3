@@ -78,5 +78,6 @@ extern "C" void mouse(int button, int state, int x, int y);
 extern "C" void reshape_window(int width, int height);
 extern "C" void idle();
 extern "C" void movement(int x, int y);
+extern "C" void passiveMotion(int x, int y);
 
 #endif

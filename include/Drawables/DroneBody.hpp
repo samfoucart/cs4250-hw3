@@ -12,8 +12,10 @@ mat4 modelView;
 
 class DroneBody: public Drawable {
 public:
-    DroneBody() : DroneBody(vec3(0, 0, 0)) {};
-    DroneBody(vec3 position);
+    enum Team{GOOD, BAD} team = GOOD;
+
+    DroneBody() : DroneBody(vec3(0, 0, 0), GOOD) {};
+    DroneBody(vec3 position, Team team = GOOD);
     std::vector<DroneRotor> droneRotors;
     DroneLauncher launcher;
 
@@ -35,12 +37,63 @@ public:
     const vec4 SELECTEDVEC = vec4(0, 1, 0, 1);
 
     vec4 currentColor = HOVERVEC;
-    enum Team{GOOD, BAD} team = GOOD;
     bool selected = false;
+    void setSelected(bool selected);
+    void setHovered(bool hovered);
 
+    bool mouseIntersecting(int x, int y);
 private:
     GLfloat wingTheta;
 }; // end class
+
+inline void DroneBody::setSelected(bool selected) {
+    this->selected = selected;
+    if (selected) {
+        currentColor = SELECTEDVEC;
+    } else {
+        if (team == GOOD) {
+            currentColor = BLUEVEC;
+        } else {
+            currentColor = REDVEC;
+        }
+    }
+}
+
+inline void DroneBody::setHovered(bool selected) {
+    if (selected) {
+        currentColor = HOVERVEC;
+    } else if (this->selected) {
+        currentColor = SELECTEDVEC;
+    } else {
+        if (team == GOOD) {
+            currentColor = BLUEVEC;
+        } else {
+            currentColor = REDVEC;
+        }
+    }
+}
+
+inline bool DroneBody::mouseIntersecting(int x, int y) {
+    float xFloat = 2 * ((float) x / (glutGet(GLUT_WINDOW_WIDTH)) - .5);
+    float yFloat = 2 * ((float) - y / (glutGet(GLUT_WINDOW_HEIGHT)) + .5);
+    transformation = defaultScale * transpose(Translate(position));
+
+    
+    vec4 mousePosition = vec4(xFloat, yFloat, 0, 1);
+    mousePosition = cs4250::modelView * mousePosition;
+    
+    if ((mousePosition.x >= -transformation[0][0] + transformation[3][0] &&
+        mousePosition.x <= transformation[0][0] + transformation[3][0]) &&
+        (mousePosition.y >= -transformation[1][1] + transformation[3][1] &&
+        mousePosition.y <= transformation[1][1] + transformation[3][1]) && 
+        (mousePosition.z >= -transformation[2][2] + transformation[3][2] &&
+        mousePosition.z <= transformation[2][2] + transformation[3][2])) {
+
+        return true;
+    }
+    std::cout << "x: " << mousePosition.x << " y: " << mousePosition.y << std::endl;
+    return false;
+}
 
 inline void DroneBody::fireMissle() {
     missleVisible = true;
@@ -54,7 +107,7 @@ inline void DroneBody::setWingTheta(GLfloat wingTheta) {
     }
 }
 
-inline DroneBody::DroneBody(vec3 position) {
+inline DroneBody::DroneBody(vec3 position, Team team) {
     /**
      * Points used to draw a wireframe cube with GL_LINE_STRIP
      */ 
@@ -88,7 +141,9 @@ inline DroneBody::DroneBody(vec3 position) {
     droneRotors.push_back(DroneRotor(DroneRotor::TOP_RIGHT));
     droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_LEFT));
     droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_RIGHT));
-    this->position = position;                   
+    this->position = position;
+
+    setSelected(false);                   
 }
 
 inline void DroneBody::draw() {

@@ -14,6 +14,7 @@
 // And to clean up the code and add more comments.
 //
 // 
+#include <memory>
 #include <Angel.h>
 #include "drone.h"
 #include "Drawables/DroneBody.hpp"
@@ -47,6 +48,9 @@ GLuint cs4250::color_loc; // location of model_view_matrix
 
 extern mat4 cs4250::modelView;
 std::vector<cs4250::DroneBody> drones;
+
+//std::shared_ptr<cs4250::DroneBody> selectedDrone;
+cs4250::DroneBody * selectedDrone = nullptr;
 
 // Set up shaders, etc.
 void init()
@@ -103,11 +107,12 @@ void init()
   glutReshapeFunc(reshape_window);
   glutIdleFunc(idle);
   glutMotionFunc(movement);
+  glutPassiveMotionFunc(passiveMotion);
 
 
 
   drones.push_back(cs4250::DroneBody(vec3(0, 0, 0)));
-  drones.push_back(cs4250::DroneBody(vec3(1, 1, 1)));
+  drones.push_back(cs4250::DroneBody(vec3(1, 0, 1)));
   drones.push_back(cs4250::DroneBody(vec3(-.75, 0, -.5)));
 }
 
@@ -131,9 +136,14 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
     break;
 
   case ' ':
+    if (selectedDrone) {
+      selectedDrone->fireMissle();
+    }
+  /*
     for(size_t i = 0; i < drones.size(); ++i) {
         drones[i].fireMissle();
   }
+  */
     break;
 
   default:
@@ -143,10 +153,28 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
 }
 
 extern "C" void mouse(int button, int state, int x, int y) {
-  if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+  if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
     // Calculate the position the mouse was originally clicked at to tell how much the user drags the mouse
     lastx = x;
     lasty = y;
+  }
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+    for (size_t i = 0; i < drones.size(); ++i) {
+      if (drones[i].mouseIntersecting(x, y)) {
+        drones[i].setSelected(true);
+        //selectedDrone = std::make_shared<cs4250::DroneBody>(drones[i]);
+        selectedDrone = &drones[i];
+      } else {
+        drones[i].setSelected(false);
+      }
+    
+    }
+
+    if (selectedDrone != nullptr) {
+      if (!selectedDrone->mouseIntersecting(x, y)) {
+        selectedDrone = nullptr;
+      }
+    }
   }
 }
 
@@ -168,7 +196,7 @@ extern "C" void idle() {
 
   // Rotate everything down slightly and counterclockwise
   //glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
-  cs4250::modelView = Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi);
+  cs4250::modelView = Scale(.25, .25, .25) * RotateX(viewTheta) * RotateY(viewPhi);
 
   // increment the wing angle
   wingTheta += 5;
@@ -186,6 +214,17 @@ extern "C" void movement(int x, int y) {
   viewPhi = (x - lastx);
 }
 
+
+extern "C" void passiveMotion(int x, int y){
+  for (size_t i = 0; i < drones.size(); ++i) {
+    if (drones[i].mouseIntersecting(x, y)) {
+      drones[i].setHovered(true);
+    } else {
+      drones[i].setHovered(false);
+    }
+  }
+
+}
 
 
 
