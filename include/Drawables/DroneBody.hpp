@@ -150,6 +150,7 @@ inline void DroneBody::draw() {
     mvStack.push(modelView);
     transformation = defaultScale * transpose(Translate(position));
     modelView = transformation * modelView;
+    //modelView = modelView * Translate(position) * defaultScale;
 
     // Rotate everything down slightly and counterclockwise
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, modelView);
