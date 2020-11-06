@@ -143,6 +143,7 @@ inline DroneBody::DroneBody(vec3 position, Team team) {
     droneRotors.push_back(DroneRotor(DroneRotor::BOTTOM_RIGHT));
     this->position = position;
 
+    this->team = team;
     setSelected(false);                   
 }
 
