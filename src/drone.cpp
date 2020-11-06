@@ -51,6 +51,7 @@ std::vector<cs4250::DroneBody> drones;
 
 //std::shared_ptr<cs4250::DroneBody> selectedDrone;
 cs4250::DroneBody * selectedDrone = nullptr;
+int selectedDroneIndex = -1;
 
 // Set up shaders, etc.
 void init()
@@ -110,10 +111,19 @@ void init()
   glutPassiveMotionFunc(passiveMotion);
 
 
+  // Draw the level
+  drawLevel();
+}
 
-  drones.push_back(cs4250::DroneBody(vec3(0, 0, 0)));
-  drones.push_back(cs4250::DroneBody(vec3(1, 0, 1)));
-  drones.push_back(cs4250::DroneBody(vec3(-.75, 0, -.5)));
+void drawLevel() {
+  drones.push_back(cs4250::DroneBody(vec3(0, 0, -5)));
+  drones.push_back(cs4250::DroneBody(vec3(5, 0, -5)));
+  drones.push_back(cs4250::DroneBody(vec3(-2, 0, -5)));
+
+
+  drones.push_back(cs4250::DroneBody(vec3(0, 0, 5), cs4250::DroneBody::BAD));
+  drones.push_back(cs4250::DroneBody(vec3(5, 0, 5), cs4250::DroneBody::BAD));
+  drones.push_back(cs4250::DroneBody(vec3(-5, 0, 5), cs4250::DroneBody::BAD));
 }
 
 //----------------------------------------------------------------------------
@@ -145,6 +155,30 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
   }
   */
     break;
+
+  case 'n':
+    if ((int) selectedDroneIndex < (int) (drones.size() - 1)) {
+      if (selectedDroneIndex > -1) {
+        drones[selectedDroneIndex].setSelected(false);
+        selectedDrone = nullptr;
+      }
+      ++selectedDroneIndex;
+      drones[selectedDroneIndex].setSelected(true);
+      selectedDrone = &drones[selectedDroneIndex];
+    }
+    break;
+
+  case 'p':
+    if (selectedDroneIndex > -1) {
+      if ((int) selectedDroneIndex < (int) (drones.size() - 1)) {
+        drones[selectedDroneIndex].setSelected(false);
+        selectedDrone = nullptr;
+      }
+      --selectedDroneIndex;
+      drones[selectedDroneIndex].setSelected(true);
+      selectedDrone = &drones[selectedDroneIndex];
+    }
+    break;  
 
   default:
     // Do nothing.
@@ -196,7 +230,7 @@ extern "C" void idle() {
 
   // Rotate everything down slightly and counterclockwise
   //glUniformMatrix4fv(cs4250::view_loc, 1, GL_FALSE, Scale(.5, .5, .5) * RotateX(viewTheta) * RotateY(viewPhi));
-  cs4250::modelView = Scale(.25, .25, .25) * RotateX(viewTheta) * RotateY(viewPhi);
+  cs4250::modelView = Scale(.1, .1, .1) * RotateX(viewTheta) * RotateY(viewPhi);
 
   // increment the wing angle
   wingTheta += 5;

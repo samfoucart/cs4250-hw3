@@ -72,6 +72,9 @@ void drawLauncher();
  * init Initializes the shaders and calls generate_points to initialize the program
  */
 void init();
+
+void drawLevel();
+
 extern "C" void display();
 extern "C" void keyboard(unsigned char key, int x, int y);
 extern "C" void mouse(int button, int state, int x, int y);
