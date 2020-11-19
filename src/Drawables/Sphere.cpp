@@ -5,16 +5,24 @@
 #include "Drawables/Sphere.h"
 
 namespace cs4250 {
-    Sphere::Sphere() {
-
-    }
+    Sphere::Sphere() = default;
 
     void Sphere::triangle(const vec4& a, const vec4& b, const vec4& c) {
-        vec3  normal = normalize(cross(b - a, c - b));
 
-        normals.push_back(normal);  points.push_back(a);
-        normals.push_back(normal);  points.push_back(b);
-        normals.push_back(normal);  points.push_back(c);
+        vec3  normal = normalize(cross(b - a, c - b));
+        normals.push_back(normal);
+        normals.push_back(normal);
+        normals.push_back(normal);
+
+
+        //normals.push_back(vec3(a.x, a.y, a.z));
+        points.push_back(a);
+
+        //normals.push_back(vec3(b.x, b.y, b.z));
+        points.push_back(b);
+
+        //normals.push_back(vec3(c.x, c.y, c.z));
+        points.push_back(c);
     }
 
     void Sphere::divide_triangle(const vec4& a, const vec4& b,

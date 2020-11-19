@@ -19,6 +19,7 @@
 #include "SpaceProgram.hpp"
 #include "Drawables/Cone.h"
 #include "Drawables/Sphere.h"
+#include "Drawables/Cube.h"
 
 
 using std::cerr;
@@ -86,7 +87,7 @@ void cs4250::SpaceProgram::init()
     // Create and initialize a buffer object
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER,allPoints.size()*sizeof(vec4)+ allNormals.size()*sizeof(vec3), nullptr, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,allPoints.size()*sizeof(vec4)+ allNormals.size()*sizeof(vec3), NULL, GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, allPoints.size() * sizeof(vec4), allPoints[0]);
     glBufferSubData(GL_ARRAY_BUFFER, allPoints.size() * sizeof(vec4), allNormals.size() * sizeof(vec3), allNormals[0]);
 
@@ -108,7 +109,7 @@ void cs4250::SpaceProgram::init()
   GLint vNormal = glGetAttribLocation(program, "vNormal");
   glEnableVertexAttribArray(vNormal);
   //glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0,BUFFER_OFFSET(onscreenCone.points.size()*sizeof(vec4) ));
-  glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0,BUFFER_OFFSET(mySphere.points.size()*sizeof(vec4) ));
+  glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0,BUFFER_OFFSET(allPoints.size() * sizeof(vec4)));
 
 
     // Initialize shader lighting parameters
@@ -117,14 +118,14 @@ void cs4250::SpaceProgram::init()
     //point4 light_position(0.0, 0.0, 1.0, 1.0);
 
     // What light source is the following?
-    light_position=vec4(.25, .1, 2, 1.0);
+    light_position=vec4(.25, .1, 5, 1.0);
 
     vec4 light_ambient(0.2, 0.2, 0.2, 1.0);
     vec4 light_diffuse(1.0, 1.0, 1.0, 1.0);
     vec4 light_specular(1.0, 1.0, 1.0, 1.0);
 
     vec4 material_ambient(1.0, 0.0, 1.0, 1.0);
-    vec4 material_diffuse(1.0, 117.0 / 255.0, 24.0 / 255.0, 1.0);
+    vec4 material_diffuse(.34, .33, .33, 1.0);
     vec4 material_specular(1.0, 0.8, 0.0, 1.0);
     float  material_shininess = 5.0;
     emmissiveColor = light_diffuse;
@@ -178,17 +179,38 @@ void cs4250::SpaceProgram::init()
 }
 
 void cs4250::SpaceProgram::createLevel() {
+    /*
     Sphere first;
-    first.tetrahedron(5);
+    first.tetrahedron(4);
     drawables.push_back(std::make_unique<Sphere>(first));
     allPoints = first.points;
     allNormals = first.normals;
+
+
     Cone second;
     second.cone();
     second.bufferPosition = allPoints.size();
     allPoints.insert(allPoints.end(), second.points.begin(), second.points.end());
     allNormals.insert(allNormals.end(), second.normals.begin(), second.normals.end());
     drawables.push_back(std::make_unique<Cone>(second));
+    /*
+    Sphere third;
+    third.tetrahedron(1);
+    drawables.push_back(std::make_unique<Sphere>(first));
+    allPoints = first.points;
+    allNormals = first.normals;
+     */
+
+
+    Cube fourth;
+    fourth.colorcube();
+    drawables.push_back(std::make_unique<Cube>(fourth));
+    allPoints = fourth.points;
+    allNormals = fourth.normals;
+
+
+
+
 }
 void cs4250::SpaceProgram::display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
@@ -270,11 +292,8 @@ extern "C" void idle() {
 
 
   glUniform1i(emmisiveLoc, 0);
-  cs4250::SpaceProgram::modelView = Translate(0, 0, -5);
-  //onscreenCone.draw();
-  //cs4250::modelView = Scale(.1, .1, .1);
+  cs4250::SpaceProgram::modelView = Translate(0, 0, -3);
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
-  //mySphere.draw();
     for (int i = 0; i < cs4250::SpaceProgram::drawables.size(); ++i) {
         if (cs4250::SpaceProgram::drawables[i] != nullptr) {
             cs4250::SpaceProgram::drawables[i]->draw();
@@ -286,9 +305,7 @@ extern "C" void idle() {
   glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
   glUniform1i(emmisiveLoc, 1);
 
-  //mySphere.draw();
-  //onscreenCone.draw();
-  //glDrawArrays(GL_TRIANGLES, 0, onscreenCone.points.size());
+
   glutSwapBuffers();
 }
 

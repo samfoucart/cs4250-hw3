@@ -5,9 +5,7 @@
 #include "Drawables/Cone.h"
 
 namespace cs4250 {
-    Cone::Cone() {
-
-    }
+    Cone::Cone() = default;
 
     void Cone::triangle(vec4 a, vec4 b, vec4 c, vec3 na, vec3 nb, vec3 nc) {
         normals.push_back(na);
