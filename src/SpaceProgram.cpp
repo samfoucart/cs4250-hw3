@@ -55,13 +55,13 @@ GLfloat material_shininess = 5.0;
 GLint emmissivep;
 
 
-mat4 cs4250::modelView;
+mat4 cs4250::SpaceProgram::modelView;
 cs4250::Cone onscreenCone;
 cs4250::Sphere mySphere;
 std::stack<mat4> mvStack;
 
 cs4250::SpaceProgram::SpaceProgram() {
-    init();
+    SpaceProgram::init();
 }
 
 // Set up shaders, etc.
@@ -172,7 +172,7 @@ void cs4250::SpaceProgram::init()
 
 
   // Set Callbacks
-  glutDisplayFunc(display);
+  glutDisplayFunc(cs4250::SpaceProgram::display);
   glutKeyboardFunc(keyboard);
   glutMouseFunc(mouse);
   glutReshapeFunc(reshape_window);
@@ -181,15 +181,22 @@ void cs4250::SpaceProgram::init()
   glutPassiveMotionFunc(passiveMotion);
 }
 
-void drawLevel() {
+void cs4250::SpaceProgram::drawLevel() {
 
 }
+void cs4250::SpaceProgram::display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
+    glutSwapBuffers();
+}
+
+/*
 
 //----------------------------------------------------------------------------
 extern "C" void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
   glutSwapBuffers();
 }
+ */
 
 //----------------------------------------------------------------------------
 // Callback to process normal keyboard characters entered.
@@ -255,14 +262,15 @@ extern "C" void idle() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
 
   glUniform1i(emmisiveLoc, 0);
-  cs4250::modelView = Translate(0, 0, -.2) * Scale(.1, .1, .1);
+  cs4250::SpaceProgram::modelView = Translate(0, 0, -.2) * Scale(.1, .1, .1);
   //onscreenCone.draw();
   //cs4250::modelView = Scale(.1, .1, .1);
+    glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
   mySphere.draw();
 
 
-  cs4250::modelView = Translate(light_position) * Scale(.1, .1, .1);
-  glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::modelView);
+  cs4250::SpaceProgram::modelView = Translate(light_position) * Scale(.1, .1, .1);
+  glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
   glUniform1i(emmisiveLoc, 1);
 
   mySphere.draw();

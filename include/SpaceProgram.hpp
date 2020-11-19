@@ -23,14 +23,16 @@ extern GLint projection_loc;
 class SpaceProgram {
 public:
     SpaceProgram();
+    static void display();
+    static mat4 modelView;
 private:
     /**
      * Initializes the shaders and calls generate_points to initialize the program
      */
-    void init();
+    static void init();
 
 
-    void drawLevel();
+    static void drawLevel();
 };
 }
 
