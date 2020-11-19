@@ -32,6 +32,7 @@
 //     copies of open-soruce project headers in the "GL" directory local
 //     this this "include" directory.
 //
+#define GL_SILENCE_DEPRECATION
 
 #ifdef __APPLE__  // include Mac OS X verions of headers
 #  include <OpenGL/OpenGL.h>

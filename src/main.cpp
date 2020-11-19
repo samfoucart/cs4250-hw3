@@ -6,6 +6,8 @@
  * @brief A program that uses glut and creates a window and initializes a display loop for an OpenGL program
  * 
  */
+#define GL_SILENCE_DEPRECATION
+
 #include <GL/glew.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -13,7 +15,7 @@
 #include <GL/glut.h>
 #endif
 #include "Angel.h"
-#include "drone.h"
+#include "SpaceProgram.hpp"
 
 //----------------------------------------------------------------------------
 int main(int argc, char **argv)

@@ -11,15 +11,13 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(extern/angel06)
 
 set(SOURCES src/main.cpp
-            src/drone.cpp
+            src/SpaceProgram.cpp
             src/ProgramGraph.cpp)
 
-set(HEADERS include/drone.h
+set(HEADERS include/SpaceProgram.hpp
             include/ProgramGraph.hpp
-            include/Drawables/DroneBody.hpp
             include/Drawable.hpp
-            include/Drawables/DroneRotor.hpp
-            include/Drawables/DroneLauncher.hpp)            
+            include/Drawables/Cube.h include/Drawables/Cone.h include/Drawables/Sphere.h)
 
 add_executable(hw2 ${SOURCES} ${HEADERS})
 target_link_libraries(hw2 Angel ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
