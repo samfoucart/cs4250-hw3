@@ -60,8 +60,12 @@ cs4250::Cone onscreenCone;
 cs4250::Sphere mySphere;
 std::stack<mat4> mvStack;
 
+cs4250::SpaceProgram::SpaceProgram() {
+    init();
+}
+
 // Set up shaders, etc.
-void init()
+void cs4250::SpaceProgram::init()
 {
   // Create the points array with all the points in it.
   #ifdef __APPLE__

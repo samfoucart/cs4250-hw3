@@ -19,14 +19,21 @@ extern mat4 modelView;
 extern GLuint view_loc; // location of model_view_matrix
 extern GLuint color_loc;
 extern GLint projection_loc;
+
+class SpaceProgram {
+public:
+    SpaceProgram();
+private:
+    /**
+     * Initializes the shaders and calls generate_points to initialize the program
+     */
+    void init();
+
+
+    void drawLevel();
+};
 }
 
-/**
- * init Initializes the shaders and calls generate_points to initialize the program
- */
-void init();
-
-void drawLevel();
 
 extern "C" void display();
 extern "C" void keyboard(unsigned char key, int x, int y);

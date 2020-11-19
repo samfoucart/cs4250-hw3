@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 
   glewInit();
 
-  init();
+  cs4250::SpaceProgram spaceProgram;
 
   glutMainLoop();
   return EXIT_SUCCESS;
