@@ -67,8 +67,10 @@ namespace cs4250 {
         SpaceProgram::modelView = SpaceProgram::modelView * Scale(.25, .25, .25);
         glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, SpaceProgram::modelView);
 
-        glDrawArrays(GL_TRIANGLES, 0, points.size());
+        glDrawArrays(GL_TRIANGLES, bufferPosition, points.size());
         SpaceProgram::modelView = SpaceProgram::mvStack.top();
         SpaceProgram::mvStack.pop();
     }
+
+    Sphere::~Sphere() = default;
 }

@@ -10,25 +10,25 @@
 
 
 namespace cs4250 {
-    //extern std::stack<mat4> mvStack;
-    class Sphere: public Drawable {
-    public:
-        std::vector<vec4> points;
-        std::vector<vec3> normals;
+class Sphere: public Drawable {
+public:
+    std::vector<vec4> points;
+    std::vector<vec3> normals;
 
-        Sphere();
+    Sphere();
+    ~Sphere();
 
-        void triangle(const vec4& a, const vec4& b, const vec4& c);
+    void triangle(const vec4& a, const vec4& b, const vec4& c);
 
-        void divide_triangle(const vec4& a, const vec4& b,
-                             const vec4& c, int count);
+    void divide_triangle(const vec4& a, const vec4& b,
+                         const vec4& c, int count);
 
-        vec4 unit(const vec4& p);
+    vec4 unit(const vec4& p);
 
-        void tetrahedron(int count);
+    void tetrahedron(int count);
 
-        void draw() override;
-    };
+    void draw() override;
+};
 }
 
 

@@ -11,7 +11,9 @@
 #define __DRONE_H__
 
 #include <Angel.h>
-#include <stack> 
+#include <memory>
+#include <stack>
+#include "Drawable.hpp"
 
 namespace cs4250 {
 extern GLuint view_loc; // location of model_view_matrix
@@ -24,6 +26,10 @@ public:
     static void display();
     static mat4 modelView;
     static std::stack<mat4> mvStack;
+    static std::vector<std::unique_ptr<Drawable>> drawables;
+    static std::vector<vec4> allPoints;
+    static std::vector<vec3> allNormals;
+    static GLint bufferSize;
 private:
     /**
      * Initializes the shaders and calls generate_points to initialize the program
@@ -31,7 +37,7 @@ private:
     static void init();
 
 
-    static void drawLevel();
+    static void createLevel();
 };
 }
 

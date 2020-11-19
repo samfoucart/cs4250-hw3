@@ -17,6 +17,7 @@ public:
     std::vector<vec3> normals;
 
     Cone();
+    ~Cone();
 
     // Build a triangle from three points.
     void triangle(vec4 a, vec4 b, vec4 c, vec3 na, vec3 nb, vec3 nc);

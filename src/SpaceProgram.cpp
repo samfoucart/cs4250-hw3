@@ -58,10 +58,15 @@ GLint emmissivep;
 mat4 cs4250::SpaceProgram::modelView;
 cs4250::Cone onscreenCone;
 cs4250::Sphere mySphere;
-std::stack<mat4> mvStack;
+std::stack<mat4> cs4250::SpaceProgram::mvStack;
+std::vector<std::unique_ptr<cs4250::Drawable>> cs4250::SpaceProgram::drawables;
+std::vector<vec4> cs4250::SpaceProgram::allPoints;
+std::vector<vec3> cs4250::SpaceProgram::allNormals;
+GLint cs4250::SpaceProgram::bufferSize;
 
 cs4250::SpaceProgram::SpaceProgram() {
     SpaceProgram::init();
+    SpaceProgram::bufferSize = 0;
 }
 
 // Set up shaders, etc.
@@ -76,23 +81,14 @@ void cs4250::SpaceProgram::init()
   glBindVertexArray(vao);
   #endif
 
-  onscreenCone.cone();
-  mySphere.tetrahedron(5);
+  createLevel();
 
-  // Create and initialize a buffer object
-  glGenBuffers(1, &buffer);
-  glBindBuffer(GL_ARRAY_BUFFER, buffer);
-  /*
-  glBufferData(GL_ARRAY_BUFFER,
-               onscreenCone.points.size()*sizeof(vec4)
-                  + onscreenCone.normals.size()*sizeof(vec3)
-               , NULL, GL_STATIC_DRAW);
-               */
-  glBufferData(GL_ARRAY_BUFFER,mySphere.points.size()*sizeof(vec4)+ mySphere.normals.size()*sizeof(vec3), NULL, GL_STATIC_DRAW);
-  //glBufferSubData(GL_ARRAY_BUFFER, 0, onscreenCone.points.size() * sizeof(vec4), onscreenCone.points[0]);
-  //glBufferSubData(GL_ARRAY_BUFFER, onscreenCone.points.size() * sizeof(vec4), onscreenCone.normals.size() * sizeof(vec3), onscreenCone.normals[0]);
-  glBufferSubData(GL_ARRAY_BUFFER, 0, mySphere.points.size() * sizeof(vec4), mySphere.points[0]);
-  glBufferSubData(GL_ARRAY_BUFFER, mySphere.points.size() * sizeof(vec4), mySphere.normals.size() * sizeof(vec3), mySphere.normals[0]);
+    // Create and initialize a buffer object
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER,allPoints.size()*sizeof(vec4)+ allNormals.size()*sizeof(vec3), nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, allPoints.size() * sizeof(vec4), allPoints[0]);
+    glBufferSubData(GL_ARRAY_BUFFER, allPoints.size() * sizeof(vec4), allNormals.size() * sizeof(vec3), allNormals[0]);
 
 
 
@@ -121,7 +117,7 @@ void cs4250::SpaceProgram::init()
     //point4 light_position(0.0, 0.0, 1.0, 1.0);
 
     // What light source is the following?
-    light_position=vec4(.25, .1, -2, 1.0);
+    light_position=vec4(.25, .1, 2, 1.0);
 
     vec4 light_ambient(0.2, 0.2, 0.2, 1.0);
     vec4 light_diffuse(1.0, 1.0, 1.0, 1.0);
@@ -181,8 +177,18 @@ void cs4250::SpaceProgram::init()
   glutPassiveMotionFunc(passiveMotion);
 }
 
-void cs4250::SpaceProgram::drawLevel() {
-
+void cs4250::SpaceProgram::createLevel() {
+    Sphere first;
+    first.tetrahedron(5);
+    drawables.push_back(std::make_unique<Sphere>(first));
+    allPoints = first.points;
+    allNormals = first.normals;
+    Cone second;
+    second.cone();
+    second.bufferPosition = allPoints.size();
+    allPoints.insert(allPoints.end(), second.points.begin(), second.points.end());
+    allNormals.insert(allNormals.end(), second.normals.begin(), second.normals.end());
+    drawables.push_back(std::make_unique<Cone>(second));
 }
 void cs4250::SpaceProgram::display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
@@ -237,8 +243,8 @@ extern "C" void reshape_window(int width, int height) {
     //  GLfloat zNear = -20.0, zFar = 20.0;
 
     // Use following for perspective projection
-    GLfloat zNear = 0.2;
-    GLfloat zFar = 40.0;
+    GLfloat zNear = .2;
+    GLfloat zFar = 100.0;
 
     GLfloat aspect = GLfloat(width)/height;
 
@@ -261,19 +267,26 @@ extern "C" void reshape_window(int width, int height) {
 extern "C" void idle() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
 
+
+
   glUniform1i(emmisiveLoc, 0);
-  cs4250::SpaceProgram::modelView = Translate(0, 0, -.2) * Scale(.1, .1, .1);
+  cs4250::SpaceProgram::modelView = Translate(0, 0, -5);
   //onscreenCone.draw();
   //cs4250::modelView = Scale(.1, .1, .1);
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
-  mySphere.draw();
+  //mySphere.draw();
+    for (int i = 0; i < cs4250::SpaceProgram::drawables.size(); ++i) {
+        if (cs4250::SpaceProgram::drawables[i] != nullptr) {
+            cs4250::SpaceProgram::drawables[i]->draw();
+        }
+    }
 
 
-  cs4250::SpaceProgram::modelView = Translate(light_position) * Scale(.1, .1, .1);
+  cs4250::SpaceProgram::modelView = Translate(light_position) * Scale(1, .1, 10);
   glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
   glUniform1i(emmisiveLoc, 1);
 
-  mySphere.draw();
+  //mySphere.draw();
   //onscreenCone.draw();
   //glDrawArrays(GL_TRIANGLES, 0, onscreenCone.points.size());
   glutSwapBuffers();
