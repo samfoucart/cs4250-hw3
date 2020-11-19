@@ -20,6 +20,7 @@
 #include "Drawables/Cone.h"
 #include "Drawables/Sphere.h"
 #include "Drawables/Cube.h"
+#include "Drawables/Cylinder.h"
 
 
 using std::cerr;
@@ -179,7 +180,7 @@ void cs4250::SpaceProgram::init()
 }
 
 void cs4250::SpaceProgram::createLevel() {
-    /*
+
     Sphere first;
     first.tetrahedron(4);
     drawables.push_back(std::make_unique<Sphere>(first));
@@ -201,12 +202,20 @@ void cs4250::SpaceProgram::createLevel() {
     allNormals = first.normals;
      */
 
+    Cylinder fifth;
+    fifth.cylinder();
+    fifth.bufferPosition = allPoints.size();
+    allPoints.insert(allPoints.end(), fifth.points.begin(), fifth.points.end());
+    allNormals.insert(allNormals.end(), fifth.normals.begin(), fifth.normals.end());
+    drawables.push_back(std::make_unique<Cylinder>(fifth));
 
+    /*
     Cube fourth;
     fourth.colorcube();
     drawables.push_back(std::make_unique<Cube>(fourth));
     allPoints = fourth.points;
     allNormals = fourth.normals;
+     */
 
 
 

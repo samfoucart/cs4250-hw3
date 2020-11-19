@@ -17,7 +17,7 @@ set(SOURCES src/main.cpp
 set(HEADERS include/SpaceProgram.hpp
             include/ProgramGraph.hpp
             include/Drawable.hpp
-            include/Drawables/Cube.h include/Drawables/Cone.h include/Drawables/Sphere.h src/Drawables/Cube.cpp include/Drawables/Cube.h)
+            include/Drawables/Cube.h include/Drawables/Cone.h include/Drawables/Sphere.h src/Drawables/Cube.cpp include/Drawables/Cube.h src/Drawables/Cylinder.cpp include/Drawables/Cylinder.h)
 
 add_executable(hw2 ${SOURCES} ${HEADERS})
 target_link_libraries(hw2 Angel ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
