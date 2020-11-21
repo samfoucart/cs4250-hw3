@@ -35,6 +35,7 @@ namespace cs4250 {
         Cube rightWing;
         Cube leftWing;
         Sphere jet = Sphere(5);
+        Sphere cockPit = Sphere(5);
         GLint totalNormals;
         GLint totalPoints;
         GLfloat pitch = 0;

@@ -13,6 +13,7 @@ void cs4250::SpaceShip::draw() {
     nose.draw();
     body.draw();
     jet.draw();
+    cockPit.draw();
     //rightWing.draw();
     //leftWing.draw();
 
@@ -42,6 +43,11 @@ cs4250::SpaceShip::SpaceShip(GLint bufferPosition){
     totalPoints += jet.points.size();
     totalNormals += jet.normals.size();
 
+    cockPit.transformation = Translate(0, .15, -1) * Scale(.5, .1, .5);
+    cockPit.bufferPosition = bufferPosition + totalPoints;
+    totalPoints += cockPit.points.size();
+    totalNormals += cockPit.normals.size();
+
     //rightWing.transformation = Translate(1, 0, 0) * Scale(.5, .1, .25);
     //leftWing.transformation = Translate(-1, 0, 0) * Scale(.5, .1, .25);
 }
@@ -65,6 +71,8 @@ std::vector<vec4> cs4250::SpaceShip::getAllPoints() const {
     allPoints.insert(allPoints.end(), body.points.begin(), body.points.end());
 
     allPoints.insert(allPoints.end(), jet.points.begin(), jet.points.end());
+
+    allPoints.insert(allPoints.end(), cockPit.points.begin(), cockPit.points.end());
     return allPoints;
 
 }
@@ -76,6 +84,8 @@ std::vector<vec3> cs4250::SpaceShip::getAllNormals() const {
     allNormals.insert(allNormals.end(), body.normals.begin(), body.normals.end());
 
     allNormals.insert(allNormals.end(), jet.normals.begin(), jet.normals.end());
+
+    allNormals.insert(allNormals.end(), cockPit.normals.begin(), cockPit.normals.end());
     return allNormals;
 }
 

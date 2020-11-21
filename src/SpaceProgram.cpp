@@ -339,7 +339,7 @@ extern "C" void idle() {
 
   glUniform1i(emmisiveLoc, 0);
     //cs4250::SpaceProgram::modelView = Translate(0, 0, -10);
-    cs4250::SpaceProgram::modelView = Translate(0, -2, -10)
+    cs4250::SpaceProgram::modelView = Translate(0, -3, -10)
             * RotateX(cs4250::SpaceProgram::cameraPitch)
             * RotateY(cs4250::SpaceProgram::cameraYaw)
             * Translate(cs4250::SpaceProgram::cameraPosition);
