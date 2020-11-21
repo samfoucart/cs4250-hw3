@@ -19,8 +19,8 @@
 #include "SpaceProgram.hpp"
 #include "Drawables/Cone.h"
 #include "Drawables/Sphere.h"
-#include "Drawables/Cube.h"
 #include "Drawables/Cylinder.h"
+#include "Drawables/SpaceShip.h"
 
 
 using std::cerr;
@@ -58,13 +58,18 @@ GLint emmissivep;
 
 
 mat4 cs4250::SpaceProgram::modelView;
-cs4250::Cone onscreenCone;
-cs4250::Sphere mySphere;
+//cs4250::Cone onscreenCone;
+//cs4250::Sphere mySphere;
 std::stack<mat4> cs4250::SpaceProgram::mvStack;
 std::vector<std::unique_ptr<cs4250::Drawable>> cs4250::SpaceProgram::drawables;
 std::vector<vec4> cs4250::SpaceProgram::allPoints;
 std::vector<vec3> cs4250::SpaceProgram::allNormals;
 GLint cs4250::SpaceProgram::bufferSize;
+int cs4250::SpaceProgram::spaceShipIndex;
+vec4 cs4250::SpaceProgram::cameraPosition;
+GLfloat cs4250::SpaceProgram::cameraPitch;
+GLfloat cs4250::SpaceProgram::cameraYaw;
+GLfloat cs4250::SpaceProgram::cameraRoll;
 
 cs4250::SpaceProgram::SpaceProgram() {
     SpaceProgram::init();
@@ -119,7 +124,7 @@ void cs4250::SpaceProgram::init()
     //point4 light_position(0.0, 0.0, 1.0, 1.0);
 
     // What light source is the following?
-    light_position=vec4(.25, .1, 5, 1.0);
+    light_position=vec4(0, 22, -5, 1.0);
 
     vec4 light_ambient(0.2, 0.2, 0.2, 1.0);
     vec4 light_diffuse(1.0, 1.0, 1.0, 1.0);
@@ -158,6 +163,7 @@ void cs4250::SpaceProgram::init()
 
     // Retrieve transformation uniform variable locations
     cs4250::view_loc = glGetUniformLocation(program, "ModelView");
+
     cs4250::projection_loc = glGetUniformLocation(program, "Projection");
 
     // Retrieve transformation uniform variable locations
@@ -181,16 +187,17 @@ void cs4250::SpaceProgram::init()
 
 void cs4250::SpaceProgram::createLevel() {
 
-    Sphere first;
-    first.tetrahedron(4);
-    drawables.push_back(std::make_unique<Sphere>(first));
+    Sphere first(4);
+
     allPoints = first.points;
     allNormals = first.normals;
+    first.transformation = Translate(.5, .5, -10);
+    drawables.push_back(std::make_unique<Sphere>(first));
 
 
     Cone second;
-    second.cone();
     second.bufferPosition = allPoints.size();
+    second.transformation = Translate(-.5, -.5, -15);
     allPoints.insert(allPoints.end(), second.points.begin(), second.points.end());
     allNormals.insert(allNormals.end(), second.normals.begin(), second.normals.end());
     drawables.push_back(std::make_unique<Cone>(second));
@@ -203,11 +210,12 @@ void cs4250::SpaceProgram::createLevel() {
      */
 
     Cylinder fifth;
-    fifth.cylinder();
     fifth.bufferPosition = allPoints.size();
     allPoints.insert(allPoints.end(), fifth.points.begin(), fifth.points.end());
     allNormals.insert(allNormals.end(), fifth.normals.begin(), fifth.normals.end());
+    fifth.transformation = Translate(0, -1, -20) * Scale(.5, .5, .5);
     drawables.push_back(std::make_unique<Cylinder>(fifth));
+
 
     /*
     Cube fourth;
@@ -217,10 +225,23 @@ void cs4250::SpaceProgram::createLevel() {
     allNormals = fourth.normals;
      */
 
+    SpaceShip spaceShip = SpaceShip(allPoints.size());
+    std::vector<vec4> spaceShipPoints = spaceShip.getAllPoints();
+    allPoints.insert(allPoints.end(), spaceShipPoints.begin(), spaceShipPoints.end());
+    std::vector<vec3> spaceShipNormals = spaceShip.getAllNormals();
+    allNormals.insert(allNormals.end(), spaceShipNormals.begin(), spaceShipNormals.end());
+    drawables.push_back(std::make_unique<SpaceShip>(spaceShip));
+    spaceShipIndex = drawables.size() - 1;
 
 
+    cameraPosition = vec4(0, 0, 0, 1);
+    cameraPitch = 0;
+    cameraYaw = 0;
+    cameraRoll = 0;
+    modelView = Translate(cameraPosition) * RotateZ(cameraPitch);
 
 }
+
 void cs4250::SpaceProgram::display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
     glutSwapBuffers();
@@ -249,8 +270,25 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
     break;
 
   case ' ':
+      cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->turnRight();
+      cs4250::SpaceProgram::cameraYaw += 15;
+      break;
 
-    break;  
+  case 'a':
+      cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->turnLeft();
+      cs4250::SpaceProgram::cameraYaw -= 15;
+      break;
+
+  case 'd':
+      cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->turnRight();
+      cs4250::SpaceProgram::cameraYaw += 15;
+      break;
+
+  case 'w':
+      cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->moveForward();
+      cs4250::SpaceProgram::cameraPosition = Translate(RotateY(- cs4250::SpaceProgram::cameraYaw) * vec4(0, 0, 1, 1))
+              * cs4250::SpaceProgram::cameraPosition;
+      break;
 
   default:
     // Do nothing.
@@ -301,7 +339,11 @@ extern "C" void idle() {
 
 
   glUniform1i(emmisiveLoc, 0);
-  cs4250::SpaceProgram::modelView = Translate(0, 0, -3);
+    //cs4250::SpaceProgram::modelView = Translate(0, 0, -10);
+    cs4250::SpaceProgram::modelView = Translate(0, -2, -10)
+            * RotateZ(cs4250::SpaceProgram::cameraPitch)
+            * RotateY(cs4250::SpaceProgram::cameraYaw)
+            * Translate(cs4250::SpaceProgram::cameraPosition);
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
     for (int i = 0; i < cs4250::SpaceProgram::drawables.size(); ++i) {
         if (cs4250::SpaceProgram::drawables[i] != nullptr) {
@@ -310,8 +352,8 @@ extern "C" void idle() {
     }
 
 
-  cs4250::SpaceProgram::modelView = Translate(light_position) * Scale(1, .1, 10);
-  glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
+  //cs4250::SpaceProgram::modelView = Translate(light_position) * Scale(1, .1, 10);
+  //glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
   glUniform1i(emmisiveLoc, 1);
 
 

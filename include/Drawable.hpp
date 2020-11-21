@@ -1,5 +1,5 @@
-#ifndef __DRAWABLE_HPP__
-#define __DRAWABLE_HPP__
+#ifndef DRAWABLE_HPP
+#define DRAWABLE_HPP
 
 #include <vector>
 #include "Angel.h"
@@ -12,9 +12,18 @@ public:
     virtual ~Drawable();
 
     std::vector<vec4> points;
+    std::vector<vec3> normals;
     mat4 transformation;
     virtual void draw() = 0;
     GLint bufferPosition = 0;
+    virtual void turnRight();
+    virtual void turnLeft();
+    virtual void moveForward();
+
+    GLfloat pitch = 0;
+    GLfloat yaw = 0;
+    GLfloat roll = 0;
+    vec4 position = vec4(0, 0, 0, 1);
 };
 }
 

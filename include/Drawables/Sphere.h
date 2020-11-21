@@ -12,10 +12,7 @@
 namespace cs4250 {
 class Sphere: public Drawable {
 public:
-    std::vector<vec4> points;
-    std::vector<vec3> normals;
-
-    Sphere();
+    Sphere(int count);
     ~Sphere();
 
     void triangle(const vec4& a, const vec4& b, const vec4& c);

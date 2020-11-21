@@ -13,9 +13,6 @@
 namespace cs4250 {
 class Cone: public Drawable {
 public:
-    std::vector<vec4> points;
-    std::vector<vec3> normals;
-
     Cone();
     ~Cone();
 

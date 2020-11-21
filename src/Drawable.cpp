@@ -6,3 +6,14 @@
 
 cs4250::Drawable::~Drawable() = default;
 
+void cs4250::Drawable::turnRight() {
+
+}
+
+void cs4250::Drawable::turnLeft() {
+
+}
+
+void cs4250::Drawable::moveForward() {
+
+}

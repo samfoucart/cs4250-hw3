@@ -5,7 +5,7 @@
 #include "Drawables/Cube.h"
 namespace cs4250 {
 cs4250::Cube::Cube() {
-
+    colorcube();
 }
 
 cs4250::Cube::~Cube() {

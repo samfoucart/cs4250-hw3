@@ -14,9 +14,6 @@
 namespace cs4250 {
 class Cylinder: public Drawable {
 public:
-    std::vector<vec4> points;
-    std::vector<vec3> normals;
-
     Cylinder();
     ~Cylinder();
 

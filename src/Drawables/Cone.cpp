@@ -5,7 +5,9 @@
 #include "Drawables/Cone.h"
 
 namespace cs4250 {
-    Cone::Cone() = default;
+    Cone::Cone() {
+        cone();
+    }
 
     void Cone::triangle(vec4 a, vec4 b, vec4 c, vec3 na, vec3 nb, vec3 nc) {
         normals.push_back(na);
@@ -40,7 +42,7 @@ namespace cs4250 {
 
     void Cone::draw()  {
         SpaceProgram::mvStack.push(SpaceProgram::modelView);
-        SpaceProgram::modelView = SpaceProgram::modelView * Translate(.5, .5, 0) * RotateX(-30) * Scale(.25, .25, .25);
+        SpaceProgram::modelView = SpaceProgram::modelView * transformation;
         glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, SpaceProgram::modelView);
 
         glDrawArrays(GL_TRIANGLES, bufferPosition, points.size());

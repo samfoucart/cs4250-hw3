@@ -5,23 +5,26 @@
 #include "Drawables/Sphere.h"
 
 namespace cs4250 {
-    Sphere::Sphere() = default;
+    Sphere::Sphere(int count) {
+        tetrahedron(count);
+    };
 
     void Sphere::triangle(const vec4& a, const vec4& b, const vec4& c) {
-
+        /*
         vec3  normal = normalize(cross(b - a, c - b));
         normals.push_back(normal);
         normals.push_back(normal);
         normals.push_back(normal);
+         */
 
 
-        //normals.push_back(vec3(a.x, a.y, a.z));
+        normals.push_back(vec3(a.x, a.y, a.z));
         points.push_back(a);
 
-        //normals.push_back(vec3(b.x, b.y, b.z));
+        normals.push_back(vec3(b.x, b.y, b.z));
         points.push_back(b);
 
-        //normals.push_back(vec3(c.x, c.y, c.z));
+        normals.push_back(vec3(c.x, c.y, c.z));
         points.push_back(c);
     }
 
@@ -72,7 +75,7 @@ namespace cs4250 {
 
     void Sphere::draw() {
         SpaceProgram::mvStack.push(SpaceProgram::modelView);
-        SpaceProgram::modelView = SpaceProgram::modelView * Scale(.25, .25, .25);
+        SpaceProgram::modelView = SpaceProgram::modelView * transformation;
         glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, SpaceProgram::modelView);
 
         glDrawArrays(GL_TRIANGLES, bufferPosition, points.size());

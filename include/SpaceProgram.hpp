@@ -30,6 +30,11 @@ public:
     static std::vector<vec4> allPoints;
     static std::vector<vec3> allNormals;
     static GLint bufferSize;
+    static int spaceShipIndex;
+    static vec4 cameraPosition;
+    static GLfloat cameraPitch;
+    static GLfloat cameraYaw;
+    static GLfloat cameraRoll;
 private:
     /**
      * Initializes the shaders and calls generate_points to initialize the program

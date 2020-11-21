@@ -56,7 +56,7 @@ void Cylinder::cylinder ()
 
 void Cylinder::draw()  {
     SpaceProgram::mvStack.push(SpaceProgram::modelView);
-    SpaceProgram::modelView = SpaceProgram::modelView * Translate(-.75, 0, 0) * RotateX(30) * Scale(.25, .25, .25);
+    SpaceProgram::modelView = SpaceProgram::modelView * transformation;
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, SpaceProgram::modelView);
 
     glDrawArrays(GL_TRIANGLES, bufferPosition, points.size());
@@ -65,7 +65,7 @@ void Cylinder::draw()  {
 }
 
     Cylinder::Cylinder() {
-
+        cylinder();
     }
 
     Cylinder::~Cylinder() {
