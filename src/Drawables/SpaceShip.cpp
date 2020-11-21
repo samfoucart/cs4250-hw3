@@ -6,7 +6,7 @@
 
 void cs4250::SpaceShip::draw() {
     SpaceProgram::mvStack.push(SpaceProgram::modelView);
-    SpaceProgram::modelView = SpaceProgram::modelView * Translate(position) * RotateY(roll);
+    SpaceProgram::modelView = SpaceProgram::modelView * Translate(position) * RotateY(roll) * RotateX(pitch);
     //SpaceProgram::modelView = SpaceProgram::modelView * RotateX(90);
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, SpaceProgram::modelView);
 
@@ -88,8 +88,12 @@ void cs4250::SpaceShip::turnLeft() {
 }
 
 void cs4250::SpaceShip::moveForward() {
-    vec4 pointing = RotateY(roll) * vec4(0, 0, -1, 0);
+    vec4 pointing = RotateY(roll) * RotateX(pitch) * vec4(0, 0, -1, 0);
     position = Translate(pointing) * position;
+}
+
+void cs4250::SpaceShip::pitchUp() {
+    pitch += 15;
 }
 
 

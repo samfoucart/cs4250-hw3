@@ -27,6 +27,7 @@ namespace cs4250 {
         void turnRight() override;
         void turnLeft() override;
         void moveForward() override;
+        void pitchUp() override;
 
     private:
         Cone nose;

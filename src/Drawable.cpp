@@ -17,3 +17,7 @@ void cs4250::Drawable::turnLeft() {
 void cs4250::Drawable::moveForward() {
 
 }
+
+void cs4250::Drawable::pitchUp() {
+
+}

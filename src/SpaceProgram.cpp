@@ -270,8 +270,8 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
     break;
 
   case ' ':
-      cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->turnRight();
-      cs4250::SpaceProgram::cameraYaw += 15;
+      cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->pitchUp();
+      cs4250::SpaceProgram::cameraPitch -= 15;
       break;
 
   case 'a':
@@ -286,8 +286,7 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
 
   case 'w':
       cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->moveForward();
-      cs4250::SpaceProgram::cameraPosition = Translate(RotateY(- cs4250::SpaceProgram::cameraYaw) * vec4(0, 0, 1, 1))
-              * cs4250::SpaceProgram::cameraPosition;
+      cs4250::SpaceProgram::cameraPosition = Translate(RotateY(- cs4250::SpaceProgram::cameraYaw) * RotateX(- cs4250::SpaceProgram::cameraPitch) * vec4(0, 0, 1, 1)) * cs4250::SpaceProgram::cameraPosition;
       break;
 
   default:
@@ -341,7 +340,7 @@ extern "C" void idle() {
   glUniform1i(emmisiveLoc, 0);
     //cs4250::SpaceProgram::modelView = Translate(0, 0, -10);
     cs4250::SpaceProgram::modelView = Translate(0, -2, -10)
-            * RotateZ(cs4250::SpaceProgram::cameraPitch)
+            * RotateX(cs4250::SpaceProgram::cameraPitch)
             * RotateY(cs4250::SpaceProgram::cameraYaw)
             * Translate(cs4250::SpaceProgram::cameraPosition);
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
