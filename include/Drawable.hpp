@@ -21,6 +21,7 @@ public:
     virtual void turnLeft();
     virtual void moveForward();
     virtual void pitchUp();
+    virtual void pitchDown();
 
     GLfloat pitch = 0;
     GLfloat yaw = 0;

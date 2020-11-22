@@ -110,4 +110,8 @@ void cs4250::SpaceShip::update(GLfloat elapsedTime) {
 
 }
 
+void cs4250::SpaceShip::pitchDown() {
+    pitch -= 15;
+}
+
 

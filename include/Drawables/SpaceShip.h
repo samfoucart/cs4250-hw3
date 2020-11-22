@@ -29,6 +29,8 @@ namespace cs4250 {
         void turnLeft() override;
         void moveForward() override;
         void pitchUp() override;
+        void pitchDown() override;
+        vec4 position = vec4(0, 0, 0, 1);
 
     private:
         Cone nose;
@@ -42,7 +44,7 @@ namespace cs4250 {
         GLfloat pitch = 0;
         GLfloat yaw = 0;
         GLfloat roll = 0;
-        vec4 position = vec4(0, 0, 0, 1);
+
 
     };
 

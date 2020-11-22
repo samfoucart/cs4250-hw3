@@ -14,7 +14,7 @@ cs4250::Cube::~Cube() {
 
 void cs4250::Cube::draw() {
     SpaceProgram::mvStack.push(SpaceProgram::modelView);
-    SpaceProgram::modelView = SpaceProgram::modelView;
+    SpaceProgram::modelView = SpaceProgram::modelView * transformation;
     glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, SpaceProgram::modelView);
 
     glDrawArrays(GL_TRIANGLES, bufferPosition, points.size());

@@ -223,15 +223,29 @@ void cs4250::SpaceProgram::createLevel() {
     drawables.push_back(std::make_unique<Cone>(second));
 
 
-    for (int i = 0; i < (rand() % 20) + 5; ++i) {
+    for (int i = 0; i < (rand() % 20) + 100; ++i) {
         Sphere asteroid = Sphere(1);
         asteroid.bufferPosition = allPoints.size();
-        asteroid.velocity = vec3((rand() % 10) - 5, (rand() % 10) - 5, (rand() % 10) - 5);
-        asteroid.position = vec3((rand() % 50) - 25, (rand() % 10) - 5, (rand() % 50) - 25);
+        asteroid.velocity = vec3((rand() % 5) - 2, (rand() % 5) - 2, (rand() % 5) - 2);
+        asteroid.position = vec3((rand() % 100) - 50, (rand() % 100) - 50, (rand() % 100) - 50);
+        asteroid.transformation = Scale((float) (rand() % 20) / 10, (float) (rand() % 20) / 10, (float) (rand() % 20) / 10);
         drawables.push_back(std::make_unique<Sphere>(asteroid));
         allPoints.insert(allPoints.end(), asteroid.points.begin(), asteroid.points.end());
         allNormals.insert(allNormals.end(), asteroid.normals.begin(), asteroid.normals.end());
     }
+
+    for (int i = 0; i < (rand() % 20) + 20; ++i) {
+        Sphere planet = Sphere(5);
+        planet.bufferPosition = allPoints.size();
+        //asteroid.velocity = vec3((rand() % 10) - 5, (rand() % 10) - 5, (rand() % 10) - 5);
+        planet.position = vec3((rand() % 250) - 125, (rand() % 250) - 100, (rand() % 250) - 125);
+        planet.transformation = Scale((rand() % 15) + 5, (rand() % 15) + 5, (rand() % 15) + 5);
+        drawables.push_back(std::make_unique<Sphere>(planet));
+        allPoints.insert(allPoints.end(), planet.points.begin(), planet.points.end());
+        allNormals.insert(allNormals.end(), planet.normals.begin(), planet.normals.end());
+    }
+
+
     Sphere third(1);
     third.bufferPosition = allPoints.size();
     third.velocity = vec3(0, 0, 0);
@@ -254,7 +268,7 @@ void cs4250::SpaceProgram::createLevel() {
     Cube fourth;
     fourth.bufferPosition = allPoints.size();
     fourth.colorcube();
-    fourth.transformation = Translate(0, .0, 0);
+    fourth.transformation = Translate(0, 5, 0);
     drawables.push_back(std::make_unique<Cube>(fourth));
     allPoints.insert(allPoints.end(), fourth.points.begin(), fourth.points.end());
     allNormals.insert(allNormals.end(), fourth.normals.begin(), fourth.normals.end());
@@ -271,6 +285,16 @@ void cs4250::SpaceProgram::createLevel() {
     drawables.push_back(std::make_unique<SpaceShip>(spaceShip));
     spaceShipIndex = drawables.size() - 1;
 
+    for (int i = 0; i < (rand() % 5) + 1; ++i) {
+        SpaceShip listSpaceShip = SpaceShip(allPoints.size());
+        spaceShipPoints = listSpaceShip.getAllPoints();
+        allPoints.insert(allPoints.end(), spaceShipPoints.begin(), spaceShipPoints.end());
+        spaceShipNormals = listSpaceShip.getAllNormals();
+        allNormals.insert(allNormals.end(), spaceShipNormals.begin(), spaceShipNormals.end());
+        listSpaceShip.velocity = vec3((rand() % 5) - 2, (rand() % 5) - 2, (rand() % 5) - 2);
+        listSpaceShip.position = vec3((rand() % 50) - 25, (rand() % 25) - 5, (rand() % 50) - 25);
+        drawables.push_back(std::make_unique<SpaceShip>(listSpaceShip));
+    }
 
     cameraPosition = vec4(0, 0, 0, 1);
     cameraPitch = 0;
@@ -324,6 +348,11 @@ extern "C" void keyboard(unsigned char key, int x, int y) {
       cs4250::SpaceProgram::cameraPitch -= 15;
       break;
 
+  case 's':
+      cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->pitchDown();
+      cs4250::SpaceProgram::cameraPitch += 15;
+      break;
+
   case 'a':
       cs4250::SpaceProgram::drawables[cs4250::SpaceProgram::spaceShipIndex]->turnLeft();
       cs4250::SpaceProgram::cameraYaw -= 15;
@@ -362,7 +391,7 @@ extern "C" void reshape_window(int width, int height) {
 
     // Use following for perspective projection
     GLfloat zNear = .2;
-    GLfloat zFar = 100.0;
+    GLfloat zFar = 1000.0;
 
     GLfloat aspect = GLfloat(width)/height;
 
