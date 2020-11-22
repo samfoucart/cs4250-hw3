@@ -27,12 +27,12 @@ cs4250::SpaceShip::SpaceShip(GLint bufferPosition){
 
     this->bufferPosition = bufferPosition;
 
-    nose.transformation = Translate(0, 0, -1.5) * Scale(1, .2, 1) * RotateX(-90);
+    nose.transformation = RotateZ(180) * Translate(0, 0, -1.5) * Scale(1, .2, 1) * RotateX(-90);
     nose.bufferPosition = bufferPosition + totalPoints;
     totalPoints += nose.points.size();
     totalNormals += nose.normals.size();
 
-    body.transformation = Translate(0, 0, .5) * Scale(1, .2, 2) * RotateX(-90);
+    body.transformation = RotateZ(180) * Translate(0, 0, .5) * Scale(1, .2, 2) * RotateX(-90);
     body.bufferPosition = bufferPosition + totalPoints;
     totalPoints += body.points.size();
     totalNormals += body.normals.size();

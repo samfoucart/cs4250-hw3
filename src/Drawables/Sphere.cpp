@@ -75,6 +75,7 @@ namespace cs4250 {
 
     void Sphere::draw() {
         SpaceProgram::mvStack.push(SpaceProgram::modelView);
+        //glUniform4fv(SpaceProgram::lightLocation, 1, SpaceProgram::modelView * SpaceProgram::defaultLightPos);
         SpaceProgram::modelView = SpaceProgram::modelView * transformation;
         glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, SpaceProgram::modelView);
 

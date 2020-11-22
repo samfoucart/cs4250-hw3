@@ -35,6 +35,9 @@ public:
     static GLfloat cameraPitch;
     static GLfloat cameraYaw;
     static GLfloat cameraRoll;
+    static vec4 lightPosition;
+    static vec4 defaultLightPos;
+    static GLint lightLocation;
 private:
     /**
      * Initializes the shaders and calls generate_points to initialize the program

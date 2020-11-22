@@ -70,10 +70,14 @@ vec4 cs4250::SpaceProgram::cameraPosition;
 GLfloat cs4250::SpaceProgram::cameraPitch;
 GLfloat cs4250::SpaceProgram::cameraYaw;
 GLfloat cs4250::SpaceProgram::cameraRoll;
+vec4 cs4250::SpaceProgram::lightPosition;
+vec4 cs4250::SpaceProgram::defaultLightPos;
+GLint cs4250::SpaceProgram::lightLocation;
 
 cs4250::SpaceProgram::SpaceProgram() {
-    SpaceProgram::init();
+    defaultLightPos = vec4(0, 5, 10, 0);
     SpaceProgram::bufferSize = 0;
+    SpaceProgram::init();
 }
 
 // Set up shaders, etc.
@@ -100,7 +104,7 @@ void cs4250::SpaceProgram::init()
 
 
   // Load shaders and use the resulting shader program
-  GLuint program = InitShader("../src/shaders/vshader56.glsl", "../src/shaders/fshader56.glsl");
+  GLuint program = InitShader("../src/shaders/vshader53.glsl", "../src/shaders/fshader53.glsl");
   glUseProgram(program);
 
   // Initialize the vertex position attribute from the vertex shader
@@ -124,7 +128,7 @@ void cs4250::SpaceProgram::init()
     //point4 light_position(0.0, 0.0, 1.0, 1.0);
 
     // What light source is the following?
-    light_position=vec4(0, 22, -5, 1.0);
+    lightPosition = defaultLightPos;
 
     vec4 light_ambient(0.2, 0.2, 0.2, 1.0);
     vec4 light_diffuse(1.0, 1.0, 1.0, 1.0);
@@ -149,8 +153,8 @@ void cs4250::SpaceProgram::init()
     GLint spec=glGetUniformLocation(program, "SpecularProduct");
     glUniform4fv(spec, 1, specular_product);
 
-    lightPos=glGetUniformLocation(program, "LightPosition");
-    glUniform4fv(lightPos, 1, light_position);
+    lightLocation = glGetUniformLocation(program, "LightPosition");
+    glUniform4fv(lightLocation, 1, lightPosition);
 
     GLint shine=glGetUniformLocation(program, "Shininess");
     glUniform1f(shine, material_shininess);
@@ -172,7 +176,7 @@ void cs4250::SpaceProgram::init()
 
     glEnable(GL_DEPTH_TEST);
 
-    glClearColor(0, 1.0, 1.0, 1.0);
+    glClearColor(0, 0, 0, 1.0);
 
 
   // Set Callbacks
