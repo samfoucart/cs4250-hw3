@@ -26,6 +26,7 @@ public:
     GLfloat yaw = 0;
     GLfloat roll = 0;
     vec4 position = vec4(0, 0, 0, 1);
+    vec3 velocity;
 };
 }
 

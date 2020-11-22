@@ -193,19 +193,19 @@ void cs4250::SpaceProgram::init()
 void cs4250::SpaceProgram::createLevel() {
 
     Sphere first(4);
-
     allPoints = first.points;
     allNormals = first.normals;
     first.transformation = Translate(.5, .5, -10);
     drawables.push_back(std::make_unique<Sphere>(first));
 
-
-    Asteroid asteroid1(1);
+    /*
+    Asteroid asteroid1(4);
     asteroid1.bufferPosition = allPoints.size();
     allPoints.insert(allPoints.end(), asteroid1.points.begin(), asteroid1.points.end());
     allNormals.insert(allNormals.end(), asteroid1.normals.begin(), asteroid1.normals.end());
-    asteroid1.transformation = Translate(-15, .5, -20);
+    asteroid1.transformation = Translate(-1, .5, 5);
     drawables.push_back(std::make_unique<Asteroid>(asteroid1));
+     */
 
 
 

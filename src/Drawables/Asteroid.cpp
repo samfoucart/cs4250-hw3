@@ -12,20 +12,21 @@ namespace cs4250 {
 
     void Asteroid::triangle(const vec4& a, const vec4& b, const vec4& c) {
 
+        /*
         vec3  normal = normalize(cross(b - a, c - b));
         normals.push_back(normal);
         normals.push_back(normal);
         normals.push_back(normal);
+         */
 
 
-
-        //normals.push_back(vec3(a.x, a.y, a.z));
+        normals.push_back(vec3(a.x, a.y, a.z));
         points.push_back(a);
 
-        //normals.push_back(vec3(b.x, b.y, b.z));
+        normals.push_back(vec3(b.x, b.y, b.z));
         points.push_back(b);
 
-        //normals.push_back(vec3(c.x, c.y, c.z));
+        normals.push_back(vec3(c.x, c.y, c.z));
         points.push_back(c);
     }
 
@@ -33,9 +34,9 @@ namespace cs4250 {
                                  const vec4& c, int count)
     {
         if (count > 0) {
-            vec4 v1 = unit(a + vec4(((float) (rand() % 100)) / 10000) + b);
-            vec4 v2 = unit(a + vec4(((float) (rand() % 100)) / 10000) + c);
-            vec4 v3 = unit(b + vec4(((float) (rand() % 100)) / 10000) + c);
+            vec4 v1 = unit(a + b);
+            vec4 v2 = unit(a + c);
+            vec4 v3 = unit(b + c);
             divide_triangle( a, v1, v2, count - 1);
             divide_triangle( c, v2, v3, count - 1);
             divide_triangle( b, v3, v1, count - 1);
