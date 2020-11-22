@@ -24,7 +24,7 @@ public:
     void cylinder ();
 
     void draw() override;
-    void update() override;
+    void update(GLfloat elapsedTime) override;
 };
 }
 

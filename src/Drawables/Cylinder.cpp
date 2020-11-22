@@ -73,7 +73,7 @@ void Cylinder::draw()  {
 
     }
 
-    void Cylinder::update() {
+    void Cylinder::update(GLfloat elapsedTime) {
 
     }
 }

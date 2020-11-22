@@ -23,7 +23,7 @@ public:
     void cone ();
 
     void draw() override;
-    void update() override;
+    void update(GLfloat elapsedTime) override;
 };
 }
 

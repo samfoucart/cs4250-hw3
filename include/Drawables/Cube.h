@@ -19,7 +19,7 @@ public:
     void MyQuad(int a, int b, int c, int d);
     void colorcube();
     void draw() override;
-    void update() override;
+    void update(GLfloat elapsedTime) override;
 
     // Vertices of a unit cube centered at origin, sides aligned with axes
     vec4 vertices[8] = {

@@ -15,7 +15,7 @@ public:
     std::vector<vec3> normals;
     mat4 transformation;
     virtual void draw() = 0;
-    virtual void update() = 0;
+    virtual void update(GLfloat elapsedTime) = 0;
     GLint bufferPosition = 0;
     virtual void turnRight();
     virtual void turnLeft();
@@ -26,7 +26,7 @@ public:
     GLfloat yaw = 0;
     GLfloat roll = 0;
     vec4 position = vec4(0, 0, 0, 1);
-    vec3 velocity;
+    vec3 velocity = vec3(0, 0, 0);
 };
 }
 

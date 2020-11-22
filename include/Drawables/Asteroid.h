@@ -24,7 +24,7 @@ namespace cs4250 {
         void tetrahedron(int count);
 
         void draw() override;
-        void update() override;
+        void update(GLfloat elapsedTime) override;
     };
 }
 

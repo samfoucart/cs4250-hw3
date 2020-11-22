@@ -226,6 +226,7 @@ void cs4250::SpaceProgram::createLevel() {
     Sphere third(1);
     //third.tetrahedron(1);
     third.bufferPosition = allPoints.size();
+    third.velocity = vec3(1, 1, 1);
     third.transformation = Translate(5, .5, -20);
     drawables.push_back(std::make_unique<Sphere>(third));
     allPoints.insert(allPoints.end(), third.points.begin(), third.points.end());
@@ -374,7 +375,15 @@ extern "C" void reshape_window(int width, int height) {
 }
 
 extern "C" void idle() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
+    static int last_time = glutGet(GLUT_ELAPSED_TIME);
+
+    int delta_time = glutGet(GLUT_ELAPSED_TIME) - last_time;
+    last_time = glutGet(GLUT_ELAPSED_TIME);
+    for (auto & drawable : cs4250::SpaceProgram::drawables) {
+        if (drawable != nullptr) {
+            drawable->update(delta_time);
+        }
+    }
   glutPostRedisplay();
 }
 

@@ -86,7 +86,7 @@ namespace cs4250 {
         SpaceProgram::mvStack.pop();
     }
 
-    void Asteroid::update() {
+    void Asteroid::update(GLfloat elapsedTime) {
 
     }
 

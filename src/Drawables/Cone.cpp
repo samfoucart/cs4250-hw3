@@ -51,7 +51,7 @@ namespace cs4250 {
         SpaceProgram::mvStack.pop();
     }
 
-    void Cone::update() {
+    void Cone::update(GLfloat elapsedTime) {
 
     }
 

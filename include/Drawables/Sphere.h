@@ -25,7 +25,7 @@ public:
     void tetrahedron(int count);
 
     void draw() override;
-    void update() override;
+    void update(GLfloat elapsedTime) override;
 };
 }
 
