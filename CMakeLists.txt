@@ -12,12 +12,12 @@ add_subdirectory(extern/angel06)
 
 set(SOURCES src/main.cpp
             src/SpaceProgram.cpp
-            src/ProgramGraph.cpp src/Drawable.cpp src/Drawables/Cone.cpp src/Drawables/Sphere.cpp src/Drawables/Cube.cpp include/Drawables/Cube.h src/Drawables/SpaceShip.cpp include/Drawables/SpaceShip.h)
+            src/ProgramGraph.cpp src/Drawable.cpp src/Drawables/Cone.cpp src/Drawables/Sphere.cpp src/Drawables/Cube.cpp include/Drawables/Cube.h src/Drawables/SpaceShip.cpp include/Drawables/SpaceShip.h src/Drawables/Asteroid.cpp include/Drawables/Asteroid.h)
 
 set(HEADERS include/SpaceProgram.hpp
             include/ProgramGraph.hpp
             include/Drawable.hpp
-            include/Drawables/Cube.h include/Drawables/Cone.h include/Drawables/Sphere.h src/Drawables/Cube.cpp include/Drawables/Cube.h src/Drawables/Cylinder.cpp include/Drawables/Cylinder.h src/Drawables/SpaceShip.cpp include/Drawables/SpaceShip.h)
+            include/Drawables/Cube.h include/Drawables/Cone.h include/Drawables/Sphere.h src/Drawables/Cube.cpp include/Drawables/Cube.h src/Drawables/Cylinder.cpp include/Drawables/Cylinder.h src/Drawables/SpaceShip.cpp include/Drawables/SpaceShip.h src/Drawables/Asteroid.cpp include/Drawables/Asteroid.h)
 
 add_executable(hw3 ${SOURCES} ${HEADERS})
 target_link_libraries(hw3 Angel ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})

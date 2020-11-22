@@ -21,6 +21,7 @@
 #include "Drawables/Sphere.h"
 #include "Drawables/Cylinder.h"
 #include "Drawables/SpaceShip.h"
+#include "Drawables/Asteroid.h"
 
 
 using std::cerr;
@@ -199,19 +200,38 @@ void cs4250::SpaceProgram::createLevel() {
     drawables.push_back(std::make_unique<Sphere>(first));
 
 
+    Asteroid asteroid1(1);
+    asteroid1.bufferPosition = allPoints.size();
+    allPoints.insert(allPoints.end(), asteroid1.points.begin(), asteroid1.points.end());
+    allNormals.insert(allNormals.end(), asteroid1.normals.begin(), asteroid1.normals.end());
+    asteroid1.transformation = Translate(-15, .5, -20);
+    drawables.push_back(std::make_unique<Asteroid>(asteroid1));
+
+
+
+    allPoints = first.points;
+    allNormals = first.normals;
+    first.transformation = Translate(.5, .5, -10);
+    drawables.push_back(std::make_unique<Sphere>(first));
+
+
     Cone second;
     second.bufferPosition = allPoints.size();
     second.transformation = Translate(-.5, -.5, -15);
     allPoints.insert(allPoints.end(), second.points.begin(), second.points.end());
     allNormals.insert(allNormals.end(), second.normals.begin(), second.normals.end());
     drawables.push_back(std::make_unique<Cone>(second));
-    /*
-    Sphere third;
-    third.tetrahedron(1);
-    drawables.push_back(std::make_unique<Sphere>(first));
-    allPoints = first.points;
-    allNormals = first.normals;
-     */
+
+
+    Sphere third(1);
+    //third.tetrahedron(1);
+    third.bufferPosition = allPoints.size();
+    third.transformation = Translate(5, .5, -20);
+    drawables.push_back(std::make_unique<Sphere>(third));
+    allPoints.insert(allPoints.end(), third.points.begin(), third.points.end());
+    allNormals.insert(allNormals.end(), third.normals.begin(), third.normals.end());
+
+
 
     Cylinder fifth;
     fifth.bufferPosition = allPoints.size();
@@ -221,13 +241,18 @@ void cs4250::SpaceProgram::createLevel() {
     drawables.push_back(std::make_unique<Cylinder>(fifth));
 
 
-    /*
+
     Cube fourth;
+    fourth.bufferPosition = allPoints.size();
     fourth.colorcube();
+    fourth.transformation = Translate(0, .0, 0);
     drawables.push_back(std::make_unique<Cube>(fourth));
-    allPoints = fourth.points;
-    allNormals = fourth.normals;
-     */
+    allPoints.insert(allPoints.end(), fourth.points.begin(), fourth.points.end());
+    allNormals.insert(allNormals.end(), fourth.normals.begin(), fourth.normals.end());
+
+
+
+
 
     SpaceShip spaceShip = SpaceShip(allPoints.size());
     std::vector<vec4> spaceShipPoints = spaceShip.getAllPoints();
