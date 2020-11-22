@@ -106,4 +106,8 @@ void cs4250::SpaceShip::pitchUp() {
     pitch += 15;
 }
 
+void cs4250::SpaceShip::update() {
+
+}
+
 

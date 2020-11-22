@@ -25,6 +25,7 @@ public:
     void tetrahedron(int count);
 
     void draw() override;
+    void update() override;
 };
 }
 

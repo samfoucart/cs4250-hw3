@@ -51,5 +51,9 @@ namespace cs4250 {
         SpaceProgram::mvStack.pop();
     }
 
+    void Cone::update() {
+
+    }
+
     Cone::~Cone() = default;
 }

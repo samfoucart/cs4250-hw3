@@ -84,5 +84,9 @@ namespace cs4250 {
         SpaceProgram::mvStack.pop();
     }
 
+    void Sphere::update() {
+
+    }
+
     Sphere::~Sphere() = default;
 }

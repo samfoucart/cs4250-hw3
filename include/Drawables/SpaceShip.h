@@ -24,6 +24,7 @@ namespace cs4250 {
         std::vector<vec4> getAllPoints() const;
         std::vector<vec3> getAllNormals() const;
         void draw() override;
+        void update() override;
         void turnRight() override;
         void turnLeft() override;
         void moveForward() override;

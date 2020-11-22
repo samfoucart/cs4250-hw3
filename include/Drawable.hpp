@@ -15,6 +15,7 @@ public:
     std::vector<vec3> normals;
     mat4 transformation;
     virtual void draw() = 0;
+    virtual void update() = 0;
     GLint bufferPosition = 0;
     virtual void turnRight();
     virtual void turnLeft();

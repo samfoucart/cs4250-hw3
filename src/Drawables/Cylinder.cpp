@@ -72,4 +72,8 @@ void Cylinder::draw()  {
     Cylinder::~Cylinder() {
 
     }
+
+    void Cylinder::update() {
+
+    }
 }

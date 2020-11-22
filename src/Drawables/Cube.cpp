@@ -61,4 +61,8 @@ void Cube::MyQuad(int a, int b, int c, int d) {
 
 }
 
+    void Cube::update() {
+
+    }
+
 }
