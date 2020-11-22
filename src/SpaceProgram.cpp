@@ -176,7 +176,7 @@ void cs4250::SpaceProgram::init()
 
     glEnable(GL_DEPTH_TEST);
 
-    glClearColor(0, 0, 0, 1.0);
+    glClearColor(.21, .175, .175, 1.0);
 
 
   // Set Callbacks
@@ -248,6 +248,18 @@ void cs4250::SpaceProgram::createLevel() {
 
 void cs4250::SpaceProgram::display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
+    glUniform1i(emmisiveLoc, 0);
+    //cs4250::SpaceProgram::modelView = Translate(0, 0, -10);
+    cs4250::SpaceProgram::modelView = Translate(0, -3, -10)
+                                      * RotateX(cs4250::SpaceProgram::cameraPitch)
+                                      * RotateY(cs4250::SpaceProgram::cameraYaw)
+                                      * Translate(cs4250::SpaceProgram::cameraPosition);
+    glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
+    for (auto & drawable : cs4250::SpaceProgram::drawables) {
+        if (drawable != nullptr) {
+            drawable->draw();
+        }
+    }
     glutSwapBuffers();
 }
 
@@ -338,29 +350,7 @@ extern "C" void reshape_window(int width, int height) {
 
 extern "C" void idle() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);          // clear the window
-
-
-
-  glUniform1i(emmisiveLoc, 0);
-    //cs4250::SpaceProgram::modelView = Translate(0, 0, -10);
-    cs4250::SpaceProgram::modelView = Translate(0, -3, -10)
-            * RotateX(cs4250::SpaceProgram::cameraPitch)
-            * RotateY(cs4250::SpaceProgram::cameraYaw)
-            * Translate(cs4250::SpaceProgram::cameraPosition);
-    glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
-    for (int i = 0; i < cs4250::SpaceProgram::drawables.size(); ++i) {
-        if (cs4250::SpaceProgram::drawables[i] != nullptr) {
-            cs4250::SpaceProgram::drawables[i]->draw();
-        }
-    }
-
-
-  //cs4250::SpaceProgram::modelView = Translate(light_position) * Scale(1, .1, 10);
-  //glUniformMatrix4fv(cs4250::view_loc, 1, GL_TRUE, cs4250::SpaceProgram::modelView);
-  glUniform1i(emmisiveLoc, 1);
-
-
-  glutSwapBuffers();
+  glutPostRedisplay();
 }
 
 extern "C" void movement(int x, int y) {
