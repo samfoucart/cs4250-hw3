@@ -223,10 +223,18 @@ void cs4250::SpaceProgram::createLevel() {
     drawables.push_back(std::make_unique<Cone>(second));
 
 
+    for (int i = 0; i < (rand() % 20) + 5; ++i) {
+        Sphere asteroid = Sphere(1);
+        asteroid.bufferPosition = allPoints.size();
+        asteroid.velocity = vec3((rand() % 10) - 5, (rand() % 10) - 5, (rand() % 10) - 5);
+        asteroid.position = vec3((rand() % 50) - 25, (rand() % 10) - 5, (rand() % 50) - 25);
+        drawables.push_back(std::make_unique<Sphere>(asteroid));
+        allPoints.insert(allPoints.end(), asteroid.points.begin(), asteroid.points.end());
+        allNormals.insert(allNormals.end(), asteroid.normals.begin(), asteroid.normals.end());
+    }
     Sphere third(1);
-    //third.tetrahedron(1);
     third.bufferPosition = allPoints.size();
-    third.velocity = vec3(1, 1, 1);
+    third.velocity = vec3(0, 0, 0);
     third.transformation = Translate(5, .5, -20);
     drawables.push_back(std::make_unique<Sphere>(third));
     allPoints.insert(allPoints.end(), third.points.begin(), third.points.end());
