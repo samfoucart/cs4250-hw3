@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(hw2)
+project(hw3)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
